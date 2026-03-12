@@ -1,72 +1,709 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>Satopi Apps</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golf Apps by さとし</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --fairway: #1a3a2a;
+      --green: #2d6a4f;
+      --light-green: #52b788;
+      --morning: #95d5b2;
+      --sky: #e8f5e9;
+      --cream: #f9f6ef;
+      --sand: #e8d5a3;
+      --flag-red: #c0392b;
+      --text-dark: #1a2e1e;
+      --text-mid: #3d5a47;
+      --text-light: #7a9e86;
+    }
 
-<style>
-body{
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial;
-    margin:40px;
-    background:#f5f5f5;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.container{
-    max-width:700px;
-    margin:auto;
-}
+    html { scroll-behavior: smooth; }
 
-.app{
-    background:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:10px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
+    body {
+      background-color: var(--cream);
+      color: var(--text-dark);
+      font-family: 'Noto Sans JP', sans-serif;
+      overflow-x: hidden;
+    }
 
-h1{
-    text-align:center;
-}
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--fairway);
+      overflow: hidden;
+    }
 
-a{
-    color:#007aff;
-    text-decoration:none;
-}
-</style>
+    /* Rolling hills SVG background */
+    .hero-hills {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 55%;
+      pointer-events: none;
+    }
 
+    /* Subtle dot-grid overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--light-green);
+      color: var(--morning);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title span {
+      color: var(--light-green);
+    }
+
+    .hero-sub {
+      margin-top: 1.2rem;
+      color: var(--morning);
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-light);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 2.5rem;
+      background: linear-gradient(to bottom, var(--light-green), transparent);
+    }
+
+    /* Flag pin decoration */
+    .flagpin {
+      position: absolute;
+      right: 8%;
+      bottom: 38%;
+      z-index: 3;
+      animation: sway 4s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .flagpin-pole {
+      width: 2px;
+      height: 70px;
+      background: var(--sand);
+      margin: 0 auto;
+    }
+
+    .flagpin-flag {
+      width: 28px;
+      height: 18px;
+      background: var(--flag-red);
+      clip-path: polygon(0 0, 100% 30%, 0 60%);
+      margin-left: 2px;
+      margin-bottom: -2px;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 6rem 1.5rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--light-green);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── APPS SECTION ── */
+    .apps-section {
+      background: var(--cream);
+    }
+
+    .apps-container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .apps-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .apps-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--fairway);
+      line-height: 1.2;
+    }
+
+    .apps-heading em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--light-green);
+      margin: 1.2rem auto 0;
+    }
+
+    /* App Cards */
+    .app-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(26, 58, 42, 0.10);
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .app-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .app-card:hover {
+      box-shadow: 0 16px 60px rgba(26, 58, 42, 0.17);
+      transform: translateY(-4px) !important;
+    }
+
+    .app-card.reverse {
+      direction: rtl;
+    }
+
+    .app-card.reverse > * {
+      direction: ltr;
+    }
+
+    .card-visual {
+      position: relative;
+      background: var(--fairway);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      overflow: hidden;
+    }
+
+    .card-visual-weather {
+      background: linear-gradient(145deg, #0d2b1f 0%, #1a5c3a 50%, #2d8f5e 100%);
+    }
+
+    .card-visual-memo {
+      background: linear-gradient(145deg, #1a3a2a 0%, #2d5a3f 50%, #4a8a62 100%);
+    }
+
+    /* Decorative circle behind mock phone */
+    .card-visual::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .card-visual::after {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Mock iPhone */
+    .mock-phone {
+      position: relative;
+      z-index: 2;
+      width: 110px;
+      height: 220px;
+      border-radius: 22px;
+      background: #0d1f14;
+      border: 2px solid rgba(255,255,255,0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 8px 10px;
+      gap: 5px;
+    }
+
+    .phone-screen-weather {
+      width: 100%;
+      flex: 1;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #1a4a6a 0%, #0d2a3f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 6px;
+    }
+
+    .weather-icon-sun {
+      font-size: 1.8rem;
+    }
+
+    .weather-temp {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .weather-bars {
+      width: 100%;
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      height: 30px;
+      margin-top: 4px;
+    }
+
+    .weather-bar {
+      flex: 1;
+      border-radius: 2px;
+    }
+
+    .phone-screen-memo {
+      width: 100%;
+      flex: 1;
+      border-radius: 10px;
+      background: #122a1c;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px;
+    }
+
+    .memo-line {
+      height: 5px;
+      border-radius: 3px;
+      background: var(--light-green);
+      opacity: 0.6;
+    }
+
+    .memo-line.short { width: 65%; }
+    .memo-line.shorter { width: 45%; }
+    .memo-line.green { background: var(--morning); opacity: 0.4; }
+
+    .memo-tag {
+      display: flex;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .memo-chip {
+      height: 8px;
+      width: 22px;
+      border-radius: 4px;
+      background: var(--light-green);
+      opacity: 0.5;
+    }
+
+    .phone-notch {
+      width: 36px;
+      height: 5px;
+      background: #1e3a28;
+      border-radius: 3px;
+      position: absolute;
+      top: 8px;
+    }
+
+    /* Card content */
+    .card-content {
+      padding: 2.5rem 2.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .app-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .status-live { color: #27ae60; }
+    .status-live .status-dot { background: #27ae60; box-shadow: 0 0 6px #27ae60; animation: pulse 1.5s infinite; }
+    .status-pending { color: var(--sand); }
+    .status-pending .status-dot { background: var(--sand); }
+
+    .app-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--fairway);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+
+    .app-name-en {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--text-light);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .app-desc {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-mid);
+      margin-bottom: 1.6rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .feature-list li {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .feature-list li::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--sky);
+      border: 1.5px solid var(--light-green);
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,5 4,7 8,3' stroke='%2352b788' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: 10px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--fairway);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+      align-self: flex-start;
+    }
+
+    .btn-store:hover {
+      background: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .btn-store-disabled {
+      background: #c8d8cc;
+      cursor: default;
+    }
+
+    .btn-store-disabled:hover {
+      background: #c8d8cc;
+      transform: none;
+    }
+
+    .btn-store svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--fairway);
+      color: var(--morning);
+      text-align: center;
+      padding: 3rem 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    footer p { opacity: 0.6; }
+    footer .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+      opacity: 1;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg); }
+      50%       { transform: rotate(2deg); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .app-card {
+        grid-template-columns: 1fr;
+        direction: ltr !important;
+      }
+
+      .app-card.reverse > * { direction: ltr; }
+
+      .card-visual {
+        min-height: 200px;
+      }
+
+      .card-content {
+        padding: 1.8rem 1.6rem;
+      }
+
+      .flagpin { display: none; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏌️ Golf Apps for iOS</div>
+    <h1 class="hero-title">Play<br/><span>Smarter</span> Golf</h1>
+    <p class="hero-sub">ゴルファーのために作られた、シンプルで実用的なiOSアプリ</p>
+  </div>
 
-<h1>Satopi iOS Apps</h1>
+  <!-- Flag pin -->
+  <div class="flagpin">
+    <div class="flagpin-flag"></div>
+    <div class="flagpin-pole"></div>
+  </div>
 
-<div class="app">
-<h2>WeatherGolf</h2>
-<p>
-ゴルフ場の天気予報を簡単に確認できるアプリです。<br>
-ラウンド前の天候チェックに役立ちます。
-</p>
+  <!-- Rolling hills -->
+  <svg class="hero-hills" viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,200 C200,100 400,250 600,180 C800,110 1000,240 1200,160 C1320,110 1400,170 1440,150 L1440,300 L0,300 Z" fill="#1a3a2a" opacity="0.6"/>
+    <path d="M0,240 C180,160 360,270 540,210 C720,150 900,260 1080,200 C1260,140 1380,220 1440,190 L1440,300 L0,300 Z" fill="#2d6a4f" opacity="0.7"/>
+    <path d="M0,270 C200,210 400,280 600,250 C800,220 1000,275 1200,245 C1340,225 1400,260 1440,250 L1440,300 L0,300 Z" fill="#f9f6ef"/>
+  </svg>
 
-<p>
-<a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964">App Storeで見る</a>
-</p>
-</div>
+  <div class="hero-scroll">Scroll</div>
+</section>
 
-<div class="app">
-<h2>ゴルフ課題メモ</h2>
-<p>
-ゴルフ練習やラウンドで見つかった課題を記録できるメモアプリです。<br>
-課題の整理と振り返りをサポートします。
-</p>
+<!-- ═══════════ APPS ═══════════ -->
+<section class="apps-section">
+  <div class="apps-container">
 
-<p>
-<a href="#">App Storeで見る（申請中）</a>
-</p>
-</div>
+    <div class="apps-header">
+      <p class="section-label">Our Apps</p>
+      <h2 class="apps-heading">ゴルフをもっと<br/><em>楽しく、賢く。</em></h2>
+      <div class="divider"></div>
+    </div>
 
-</div>
+    <!-- ── App 1: Weather Golf ── -->
+    <div class="app-card">
+      <div class="card-visual card-visual-weather">
+        <div class="mock-phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen-weather">
+            <div class="weather-icon-sun">⛅</div>
+            <div class="weather-temp">22°C</div>
+            <div class="weather-bars">
+              <div class="weather-bar" style="height:60%;background:#52b788;"></div>
+              <div class="weather-bar" style="height:80%;background:#52b788;"></div>
+              <div class="weather-bar" style="height:45%;background:#95d5b2;"></div>
+              <div class="weather-bar" style="height:90%;background:#52b788;"></div>
+              <div class="weather-bar" style="height:55%;background:#2d8f5e;"></div>
+              <div class="weather-bar" style="height:70%;background:#52b788;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="card-content">
+        <div class="app-status status-live">
+          <span class="status-dot"></span> Available on App Store
+        </div>
+        <h3 class="app-name">Weather Golf</h3>
+        <p class="app-name-en">Golf Course Weather &amp; Score Analysis</p>
+        <p class="app-desc">
+          ゴルフ場の天気予報とスコアへの影響を分析。
+          ラウンド前に風速・気温・降水を確認して、
+          最高のゴルフ日和を見つけましょう。
+        </p>
+        <ul class="feature-list">
+          <li>ゴルフ場ごとの詳細天気予報</li>
+          <li>気象条件がスコアに与える影響を可視化</li>
+          <li>楽天GORAのコースデータと連携</li>
+          <li>無料・広告サポート・ログイン不要</li>
+        </ul>
+        <a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964" class="btn-store">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store で見る
+        </a>
+      </div>
+    </div>
+
+    <!-- ── App 2: Golf Issue Memo ── -->
+    <div class="app-card reverse">
+      <div class="card-visual card-visual-memo">
+        <div class="mock-phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen-memo">
+            <div class="memo-line" style="width:80%"></div>
+            <div class="memo-line short green"></div>
+            <div class="memo-tag">
+              <div class="memo-chip"></div>
+              <div class="memo-chip" style="background:#95d5b2;width:16px;"></div>
+            </div>
+            <div style="height:6px;"></div>
+            <div class="memo-line" style="width:90%"></div>
+            <div class="memo-line shorter green"></div>
+            <div class="memo-tag">
+              <div class="memo-chip" style="background:#e8d5a3;"></div>
+            </div>
+            <div style="height:6px;"></div>
+            <div class="memo-line" style="width:75%"></div>
+            <div class="memo-line short"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-content">
+        <div class="app-status status-pending">
+          <span class="status-dot"></span> App Store 申請中
+        </div>
+        <h3 class="app-name">ゴルフ課題メモ</h3>
+        <p class="app-name-en">Golf Issue Memo</p>
+        <p class="app-desc">
+          ラウンドで気づいた課題や改善点をサッとメモ。
+          タグ・カテゴリで整理して、練習の優先順位を明確に。
+          上達の記録をシンプルに積み上げましょう。
+        </p>
+        <ul class="feature-list">
+          <li>課題・改善点をすばやく記録</li>
+          <li>タグとカテゴリで整理・絞り込み</li>
+          <li>練習の優先度を可視化</li>
+          <li>シンプルで直感的なUI</li>
+        </ul>
+        <span class="btn-store btn-store-disabled">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          近日公開予定
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <p class="footer-brand">⛳ Satopi Apps</p>
+  <p>Made with ❤️ for golfers in Japan</p>
+  <p style="margin-top:0.4rem;">© 2026 Satoshi Ohara. All rights reserved.</p>
+</footer>
+
+<script>
+  // Scroll reveal for app cards
+  const cards = document.querySelectorAll('.app-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(c => observer.observe(c));
+</script>
 </body>
 </html>
