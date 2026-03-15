@@ -1,1 +1,349 @@
+/* ============================================================
+   common.css — Satopi Apps 共通スタイル
+   編集する場合：
+   - カラーは :root の変数を変えるだけでサイト全体に反映されます
+   - フォントは @import の行を変えてください
+   ============================================================ */
 
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+/* ── カラー変数（ここを変えると全ページに反映） ── */
+:root {
+  /* ブランドカラー */
+  --color-primary:      #1a3a2a;   /* ダークグリーン（ヘッダー・フッター等） */
+  --color-accent:       #52b788;   /* ライトグリーン（ボタン・アクセント） */
+  --color-accent-light: #95d5b2;   /* さらに薄いグリーン */
+  --color-bg:           #f7f4ed;   /* ページ背景（クリーム） */
+  --color-surface:      #ffffff;   /* カード背景 */
+  --color-sand:         #e8d5a3;   /* サブアクセント（砂色） */
+
+  /* テキスト */
+  --color-text:         #1a2e1e;   /* 本文（濃いグリーン系黒） */
+  --color-text-mid:     #3d5a47;   /* 中間テキスト */
+  --color-text-light:   #7a9e86;   /* 薄いテキスト・注釈 */
+
+  /* フォント */
+  --font-display: 'Cormorant Garamond', serif;   /* 見出し・タイトル */
+  --font-body:    'Noto Sans JP', sans-serif;     /* 本文 */
+
+  /* スペーシング */
+  --section-padding: 6rem 0;
+  --container-max:   1100px;
+  --container-pad:   2.5rem;
+
+  /* ボーダーラジウス */
+  --radius-card: 20px;
+  --radius-btn:  100px;
+
+  /* シャドウ */
+  --shadow-card:  0 4px 30px rgba(26, 58, 42, 0.08);
+  --shadow-hover: 0 12px 50px rgba(26, 58, 42, 0.16);
+}
+
+/* ── リセット ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+/* ── コンテナ ── */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+/* ── セクション共通 ── */
+.section {
+  padding: var(--section-padding);
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.6rem;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-primary);
+}
+
+.section-heading em {
+  font-style: italic;
+  color: #2d6a4f;
+}
+
+.section-divider {
+  width: 50px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: 1.2rem 0 0;
+}
+
+/* ── ボタン ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #2d6a4f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26, 58, 42, 0.25);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.btn-accent:hover {
+  background: var(--color-accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(82, 183, 136, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+.btn-ghost:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-ghost-light {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.btn-ghost-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-disabled {
+  background: #c8d8cc;
+  color: #fff;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── カード共通 ── */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+/* ── バッジ ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge-live {
+  color: #27ae60;
+}
+.badge-live .badge-dot {
+  background: #27ae60;
+  box-shadow: 0 0 7px #27ae60;
+  animation: pulse 1.6s infinite;
+}
+
+.badge-soon {
+  color: #b8962e;
+}
+.badge-soon .badge-dot {
+  background: var(--color-sand);
+}
+
+/* ── フッター共通 ── */
+.site-footer {
+  background: var(--color-primary);
+  padding: 4rem var(--container-pad);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.site-footer .footer-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.site-footer .footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: #fff;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.4rem;
+  text-decoration: none;
+}
+
+.site-footer .footer-tagline {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  font-weight: 300;
+}
+
+.site-footer .footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.site-footer .footer-links a {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.site-footer .footer-links a:hover {
+  color: var(--color-accent-light);
+}
+
+.site-footer .footer-copy {
+  max-width: var(--container-max);
+  margin: 2rem auto 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.5rem;
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+/* ── スクロール表示アニメーション ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 遅延クラス */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+
+/* ── キーフレーム ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 7px #27ae60; }
+  50%       { opacity: 0.4; box-shadow: 0 0 3px #27ae60; }
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1.0); }
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(7px); }
+}
+
+/* ── レスポンシブ ── */
+@media (max-width: 768px) {
+  :root {
+    --container-pad: 1.4rem;
+    --section-padding: 4rem 0;
+  }
+
+  .site-footer .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .site-footer .footer-links {
+    align-items: flex-start;
+  }
+}
