@@ -1,1 +1,528 @@
-weathergolf
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プライバシーポリシー | Weather Golf</title>
+  <meta name="description" content="Weather Golf のプライバシーポリシーです。情報の収集・利用・第三者提供について説明します。" />
+  <meta name="robots" content="noindex" />
+
+  <link rel="stylesheet" href="../../assets/css/common.css" />
+
+  <style>
+
+    /* ── ページヘッダー ── */
+    .page-header {
+      background: var(--color-primary);
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 0 4rem;
+      text-align: center;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      top: -160px; right: -160px;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      border: 1px solid rgba(82,183,136,0.08);
+      pointer-events: none;
+    }
+    .page-header-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .page-header-app {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--color-accent-light);
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .page-header-app::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--color-accent);
+    }
+    .page-header-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.8rem;
+    }
+    .page-header-date {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── メインレイアウト ── */
+    .policy-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 4rem var(--container-pad) 6rem;
+    }
+
+    /* リード文 */
+    .policy-lead {
+      font-size: 0.92rem;
+      line-height: 2;
+      color: var(--color-text-mid);
+      font-weight: 300;
+      padding: 1.8rem 2rem;
+      background: #fff;
+      border-radius: 14px;
+      border-left: 3px solid var(--color-accent);
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    /* セクション */
+    .policy-section {
+      margin-bottom: 3rem;
+    }
+    .policy-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(26,58,42,0.1);
+    }
+    .policy-section-num {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: rgba(82,183,136,0.3);
+      line-height: 1;
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
+    .policy-section-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .policy-text {
+      font-size: 0.875rem;
+      line-height: 2;
+      color: var(--color-text-mid);
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    .policy-text:last-child { margin-bottom: 0; }
+
+    /* サブセクション */
+    .policy-sub { margin: 1.2rem 0 1rem; }
+    .policy-sub-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .policy-sub-title::before {
+      content: '';
+      display: block;
+      width: 3px; height: 14px;
+      background: var(--color-accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* 箇条書き */
+    .policy-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-left: 0.5rem;
+    }
+    .policy-list li {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: var(--color-text-mid);
+      font-weight: 300;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .policy-list li::before {
+      content: '・';
+      color: var(--color-accent);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* 第三者サービスカード */
+    .policy-info-card {
+      background: #f7f4ed;
+      border: 1px solid rgba(26,58,42,0.1);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      margin: 1rem 0;
+    }
+    .policy-info-card-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+    .policy-info-card .policy-list { padding-left: 0; }
+
+    /* 第三者サービスグループ（3つ並べる） */
+    .policy-services {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    /* 外部リンク */
+    .policy-link {
+      color: var(--color-accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(82,183,136,0.35);
+      transition: border-color 0.2s, color 0.2s;
+      font-size: 0.875rem;
+    }
+    .policy-link:hover {
+      color: #2d6a4f;
+      border-color: #2d6a4f;
+    }
+
+    /* お問い合わせCTAカード */
+    .contact-card {
+      background: var(--color-primary);
+      border-radius: 16px;
+      padding: 2.2rem 2rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .contact-card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .contact-card-text {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.4rem;
+      font-weight: 300;
+    }
+    .btn-contact-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-accent);
+      color: var(--color-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.7rem 1.6rem;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-contact-sm:hover {
+      background: var(--color-accent-light);
+      transform: translateY(-2px);
+    }
+
+    /* ── ナビゲーション ── */
+    .page-nav {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(26,58,42,0.08);
+      padding: 0.9rem var(--container-pad);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .page-nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .page-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--color-text-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .page-nav-back:hover { color: var(--color-primary); }
+    .page-nav-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+    .page-nav-label {
+      font-size: 0.75rem;
+      color: var(--color-text-light);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── フッター（シンプル版） ── */
+    .page-footer {
+      background: #0a1a10;
+      padding: 2rem var(--container-pad);
+      text-align: center;
+    }
+    .page-footer-copy {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.22);
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 680px) {
+      .policy-wrap { padding: 2.5rem var(--container-pad) 4rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ナビゲーション -->
+<nav class="page-nav">
+  <div class="page-nav-inner">
+    <a href="../../index.html" class="page-nav-back">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Satopi Apps トップへ
+    </a>
+    <span class="page-nav-label">プライバシーポリシー</span>
+  </div>
+</nav>
+
+<!-- ページヘッダー -->
+<header class="page-header">
+  <div class="page-header-inner container">
+    <p class="page-header-app">Weather Golf — ゴルフ場天気 &amp; スコア影響分析</p>
+    <h1 class="page-header-title">プライバシーポリシー</h1>
+    <p class="page-header-date">最終更新日：2026年3月8日</p>
+  </div>
+</header>
+
+<!-- 本文 -->
+<main class="policy-wrap">
+
+  <!-- リード文 -->
+  <p class="policy-lead">
+    ウェザーゴルフ（以下「本アプリ」といいます）は、ユーザーの皆様のプライバシーを尊重し、個人情報の保護に努めます。本プライバシーポリシーは、本アプリにおける情報の取り扱いについて説明するものです。
+  </p>
+
+  <!-- 1. 収集する情報 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">01</span>
+      <h2 class="policy-section-title">収集する情報</h2>
+    </div>
+
+    <div class="policy-sub">
+      <p class="policy-sub-title">ユーザーが入力する情報</p>
+      <ul class="policy-list">
+        <li>ゴルフ場検索に関する検索条件（地域、日付など）</li>
+        <li>お気に入りに登録したゴルフ場の情報</li>
+        <li>閲覧履歴に含まれるゴルフ場の情報</li>
+        <li>スケジュールに登録したゴルフ場および日時の情報</li>
+      </ul>
+    </div>
+
+    <div class="policy-sub">
+      <p class="policy-sub-title">自動的に収集される情報</p>
+      <ul class="policy-list">
+        <li>端末情報（OS、端末モデル、アプリバージョンなど）</li>
+        <li>アプリの利用状況（起動回数、機能の利用状況など）</li>
+        <li>IPアドレス、アクセス日時</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2. 情報の利用目的 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">02</span>
+      <h2 class="policy-section-title">情報の利用目的</h2>
+    </div>
+    <ul class="policy-list">
+      <li>ゴルフ場の検索結果および天気予報の提供</li>
+      <li>お気に入り、履歴、スケジュール機能の提供</li>
+      <li>本アプリの機能改善およびユーザー体験の向上</li>
+      <li>広告の配信および効果測定</li>
+      <li>アプリの不正利用の防止および技術的問題の解決</li>
+    </ul>
+  </section>
+
+  <!-- 3. 第三者への提供 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">03</span>
+      <h2 class="policy-section-title">第三者への提供</h2>
+    </div>
+    <p class="policy-text">本アプリは、以下の第三者サービスを利用しており、これらのサービスに情報が送信されます。</p>
+
+    <div class="policy-services">
+
+      <!-- 楽天GORA -->
+      <div class="policy-info-card">
+        <p class="policy-info-card-title">楽天GORA API</p>
+        <ul class="policy-list">
+          <li>提供目的：ゴルフ場情報の取得</li>
+          <li>提供される情報：ゴルフ場検索条件（地域、日付など）</li>
+          <li>プライバシーポリシー：
+            <a href="https://privacy.rakuten.co.jp/" class="policy-link" target="_blank" rel="noopener">
+              https://privacy.rakuten.co.jp/
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- WeatherAPI -->
+      <div class="policy-info-card">
+        <p class="policy-info-card-title">WeatherAPI.com</p>
+        <ul class="policy-list">
+          <li>提供目的：天気情報の取得</li>
+          <li>提供される情報：ゴルフ場の位置情報（緯度・経度）</li>
+          <li>プライバシーポリシー：
+            <a href="https://www.weatherapi.com/privacy.aspx" class="policy-link" target="_blank" rel="noopener">
+              https://www.weatherapi.com/privacy.aspx
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Google AdMob -->
+      <div class="policy-info-card">
+        <p class="policy-info-card-title">Google AdMob</p>
+        <ul class="policy-list">
+          <li>提供目的：広告の配信および効果測定</li>
+          <li>提供される情報：端末情報、IPアドレス、利用状況情報</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <p class="policy-text">
+      本アプリでは、Google LLC が提供する広告配信サービス「Google AdMob」を利用しています。
+    </p>
+    <p class="policy-text">
+      本アプリは、ユーザーの興味関心に基づくパーソナライズ広告は配信しておらず、非パーソナライズ広告のみを表示します。そのため、広告識別子（IDFA等）を利用したトラッキングは行っていません。
+    </p>
+    <p class="policy-text">
+      非パーソナライズ広告においては、広告の表示および効果測定のため、端末情報、IPアドレス、利用状況情報等が自動的に取得・利用される場合がありますが、これらの情報により個人を特定するものではありません。
+    </p>
+    <p class="policy-text">
+      Googleのプライバシーポリシー：
+      <a href="https://policies.google.com/privacy" class="policy-link" target="_blank" rel="noopener">
+        https://policies.google.com/privacy
+      </a>
+    </p>
+  </section>
+
+  <!-- 4. 情報の保存 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">04</span>
+      <h2 class="policy-section-title">情報の保存</h2>
+    </div>
+    <ul class="policy-list">
+      <li>お気に入り、履歴、スケジュールの情報は、ユーザーの端末内にのみ保存されます。</li>
+      <li>これらの情報は、アプリを削除することで完全に削除されます。</li>
+      <li>本アプリは、ユーザーアカウント機能を持たないため、サーバー上に個人情報を保存することはありません。</li>
+    </ul>
+  </section>
+
+  <!-- 5. セキュリティ -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">05</span>
+      <h2 class="policy-section-title">セキュリティ</h2>
+    </div>
+    <p class="policy-text">
+      本アプリは、収集した情報を適切に管理し、不正アクセス、紛失、破壊、改ざん、漏洩などから保護するため、合理的なセキュリティ対策を講じます。外部APIとの通信は、暗号化された安全な接続（HTTPS）を使用します。
+    </p>
+  </section>
+
+  <!-- 6. 未成年者の利用 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">06</span>
+      <h2 class="policy-section-title">未成年者の利用</h2>
+    </div>
+    <p class="policy-text">
+      本アプリは年齢制限を設けていませんが、未成年者が利用する場合は保護者の同意を得てください。
+    </p>
+  </section>
+
+  <!-- 7. プライバシーポリシーの変更 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">07</span>
+      <h2 class="policy-section-title">プライバシーポリシーの変更</h2>
+    </div>
+    <p class="policy-text">
+      本アプリは、必要に応じて本プライバシーポリシーを変更することがあります。変更後のプライバシーポリシーは、本アプリ内またはウェブサイトで公表した時点から効力を生じるものとします。重要な変更がある場合は、アプリ内で通知します。
+    </p>
+  </section>
+
+  <!-- 8. お問い合わせ -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">08</span>
+      <h2 class="policy-section-title">お問い合わせ</h2>
+    </div>
+    <p class="policy-text">本プライバシーポリシーに関するご質問・ご意見、または個人情報の取り扱いに関するお問い合わせは以下からお願いいたします。</p>
+    <div class="contact-card">
+      <p class="contact-card-title">Weather Golf — ゴルフ場天気 &amp; スコア影響分析</p>
+      <p class="contact-card-text">お気軽にお問い合わせください</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog"
+         class="btn-contact-sm" target="_blank" rel="noopener">
+        お問い合わせフォームへ →
+      </a>
+    </div>
+  </section>
+
+  <!-- 9. 適用法令 -->
+  <section class="policy-section reveal">
+    <div class="policy-section-header">
+      <span class="policy-section-num">09</span>
+      <h2 class="policy-section-title">適用法令</h2>
+    </div>
+    <p class="policy-text">
+      本プライバシーポリシーは、日本国の法令に準拠します。
+    </p>
+  </section>
+
+</main>
+
+<!-- フッター -->
+<footer class="page-footer">
+  <p class="page-footer-copy">© <span id="footer-year"></span> Satoshi Ohara. All rights reserved.</p>
+</footer>
+
+<script src="../../assets/js/common.js"></script>
+
+</body>
+</html>
