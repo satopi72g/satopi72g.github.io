@@ -1,1 +1,1449 @@
-golf-issue-memo indexhtml
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ゴルフ課題メモ — Golf Issue Memo</title>
+  <meta name="description" content="練習・ラウンド後すぐに課題をメモ。達成度を星で記録し、課題を可視化。ゲーム感覚でモチベーションを維持しながらゴルフを上達させるiOSアプリ。" />
+  <link rel="stylesheet" href="../../assets/css/common.css" />
+
+  <style>
+    /* ================================================================
+       ゴルフ課題メモ — page-specific styles
+       カラーアクセント：WGのグリーン系を継承しつつ、
+       アンバー（金）をサブアクセントに加えてワクワク感を演出
+    ================================================================ */
+
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+
+    /* ── GIM専用カラー変数 ── */
+    :root {
+      --gim-amber:       #e8a020;   /* アンバー（課題・モチベーション感） */
+      --gim-amber-light: #f5c96a;   /* 薄いアンバー */
+      --gim-amber-dark:  #b87a10;   /* 濃いアンバー */
+      --gim-star:        #f0b429;   /* 星の色 */
+    }
+
+    /* ── ナビゲーション ── */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 0.9rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(26, 58, 42, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.4s, box-shadow 0.3s;
+    }
+    .site-nav.scrolled {
+      background: rgba(247, 244, 237, 0.94);
+      box-shadow: 0 2px 24px rgba(26, 58, 42, 0.1);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: color 0.4s;
+    }
+    .site-nav.scrolled .nav-logo { color: var(--color-primary); }
+    .nav-logo-sep {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 400;
+      opacity: 0.55;
+      padding-left: 0.6rem;
+      border-left: 1px solid rgba(255,255,255,0.3);
+      letter-spacing: 0.06em;
+    }
+    .site-nav.scrolled .nav-logo-sep {
+      border-left-color: rgba(26,58,42,0.2);
+      opacity: 1;
+      color: var(--color-text-light);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .site-nav.scrolled .nav-links a { color: var(--color-text-mid); }
+    .site-nav.scrolled .nav-links a:hover { color: var(--color-primary); }
+    .nav-privacy {
+      background: rgba(255,255,255,0.12) !important;
+      color: rgba(255,255,255,0.92) !important;
+      border: 1px solid rgba(255,255,255,0.28) !important;
+      padding: 0.3rem 0.85rem;
+      border-radius: 100px;
+      font-weight: 600 !important;
+      transition: all 0.25s !important;
+    }
+    .nav-privacy:hover { background: rgba(255,255,255,0.22) !important; }
+    .site-nav.scrolled .nav-privacy {
+      background: rgba(82,183,136,0.12) !important;
+      color: #2d8a5f !important;
+      border-color: rgba(82,183,136,0.4) !important;
+    }
+    .site-nav.scrolled .nav-privacy:hover {
+      background: var(--color-accent) !important;
+      color: #fff !important;
+    }
+
+    /* ── ヒーロー（フルブリード写真） ── */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      animation: heroZoom 14s ease-out both;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        110deg,
+        rgba(12, 34, 20, 0.82) 0%,
+        rgba(12, 34, 20, 0.58) 50%,
+        rgba(12, 34, 20, 0.22) 100%
+      );
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 9rem var(--container-pad) 6rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 5rem;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gim-amber-light);
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 22px; height: 1px;
+      background: var(--gim-amber-light);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gim-amber-light);
+    }
+    .hero-desc {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.85;
+      margin-bottom: 2.6rem;
+      max-width: 440px;
+    }
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    /* App Store バッジ */
+    .badge-appstore {
+      display: inline-block;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .badge-appstore:hover { transform: translateY(-2px); opacity: 0.9; }
+    .badge-appstore img { height: 44px; width: auto; display: block; }
+    .badge-appstore-wht img { filter: brightness(0) invert(1); }
+    .hero-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .hero-contact:hover { color: rgba(255,255,255,0.9); }
+    /* スマホ画像 */
+    .hero-phones {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: relative;
+      padding-bottom: 2rem;
+    }
+    .hero-phone-main {
+      width: 230px;
+      border-radius: 36px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.42);
+      position: relative;
+      z-index: 2;
+      animation: heroZoom 1.6s ease-out both;
+    }
+    .hero-phone-sub {
+      width: 135px;
+      border-radius: 22px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.36);
+      position: absolute;
+      bottom: 12px;
+      right: 0;
+      z-index: 3;
+      animation: heroZoom 2s ease-out 0.25s both;
+    }
+    /* スクロールヒント */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      animation: scrollBounce 2.2s infinite;
+    }
+    .scroll-hint-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.42));
+    }
+
+    /* ── プライバシーリボン ── */
+    .privacy-ribbon {
+      background: linear-gradient(90deg,
+        rgba(45,106,79,0.07) 0%,
+        rgba(82,183,136,0.13) 50%,
+        rgba(45,106,79,0.07) 100%
+      );
+      border-top: 1px solid rgba(82,183,136,0.2);
+      border-bottom: 1px solid rgba(82,183,136,0.2);
+      padding: 0.85rem var(--container-pad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+    }
+    .privacy-ribbon-text {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: var(--color-text-mid);
+    }
+    .privacy-ribbon-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #2d8a5f;
+      text-decoration: none;
+      background: rgba(82,183,136,0.14);
+      border: 1px solid rgba(82,183,136,0.38);
+      padding: 0.3rem 0.88rem;
+      border-radius: 100px;
+      transition: all 0.2s;
+    }
+    .privacy-ribbon-link:hover {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
+
+    /* ── 統計バー ── */
+    .stats-bar {
+      background: var(--color-primary);
+      padding: 2.4rem var(--container-pad);
+    }
+    .stats-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--gim-amber-light);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .stat-unit {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--gim-amber-light);
+      opacity: 0.75;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.52);
+      margin-top: 0.35rem;
+      letter-spacing: 0.05em;
+    }
+    .stat-divider {
+      width: 1px; height: 3rem;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ── 星レーティング装飾 ── */
+    .star-row {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      margin-bottom: 1rem;
+    }
+    .star-row span {
+      font-size: 1.2rem;
+      color: var(--gim-star);
+    }
+    .star-row .star-empty { color: rgba(240,180,41,0.25); }
+
+    /* ── 機能カード ── */
+    .features-section {
+      background: var(--color-surface);
+      padding: var(--section-padding);
+    }
+    .features-header { text-align: center; margin-bottom: 4rem; }
+    .features-header .section-divider { margin: 1.2rem auto 0; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(26,58,42,0.06);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gim-amber), var(--gim-amber-light));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .feature-card:hover::after { transform: scaleX(1); }
+    .feature-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.55rem;
+    }
+    .feature-desc {
+      font-size: 0.84rem;
+      color: var(--color-text-mid);
+      line-height: 1.85;
+    }
+    /* 特別カード（スタンプ演出）*/
+    .feature-card.highlight {
+      background: linear-gradient(135deg,
+        rgba(232,160,32,0.08) 0%,
+        rgba(245,201,106,0.12) 100%
+      );
+      border-color: rgba(232,160,32,0.2);
+    }
+    .feature-card.highlight::after {
+      background: linear-gradient(90deg, var(--gim-amber-dark), var(--gim-amber));
+    }
+
+    /* ── 分割セクション ── */
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 500px;
+    }
+    .split-section.reverse { direction: rtl; }
+    .split-section.reverse > * { direction: ltr; }
+    .split-photo { overflow: hidden; }
+    .split-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.9s ease;
+    }
+    .split-section:hover .split-photo img { transform: scale(1.04); }
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem var(--container-pad);
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .split-content.light {
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+    .split-content .section-label { color: var(--gim-amber-light); }
+    .split-content .section-label::before { background: var(--gim-amber-light); }
+    .split-content.light .section-label { color: var(--gim-amber-dark); }
+    .split-content.light .section-label::before { background: var(--gim-amber-dark); }
+    .split-content .section-heading { color: #fff; }
+    .split-content.light .section-heading { color: var(--color-primary); }
+    .split-content p {
+      font-size: 0.9rem;
+      line-height: 1.95;
+      margin-top: 1.4rem;
+      max-width: 440px;
+      color: rgba(255,255,255,0.72);
+    }
+    .split-content.light p { color: var(--color-text-mid); }
+
+    /* ── スクリーンショットギャラリー ── */
+    .gallery-section {
+      padding: var(--section-padding);
+      background: var(--color-bg);
+      overflow: hidden;
+    }
+    .gallery-intro {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--container-pad);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+    .gallery-scroll {
+      display: flex;
+      gap: 1.2rem;
+      overflow-x: auto;
+      padding: 1.2rem 0 2rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gim-amber-light) transparent;
+      -webkit-overflow-scrolling: touch;
+      padding-left: max(1.4rem, calc((100vw - 1100px) / 2 + 2.5rem));
+      padding-right: max(1.4rem, calc((100vw - 1100px) / 2 + 2.5rem));
+    }
+    .gallery-scroll::-webkit-scrollbar { height: 3px; }
+    .gallery-scroll::-webkit-scrollbar-thumb {
+      background: var(--gim-amber-light);
+      border-radius: 2px;
+    }
+    .gallery-thumb {
+      flex-shrink: 0;
+      width: 185px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(26,58,42,0.15);
+      transition: transform 0.3s;
+    }
+    .gallery-thumb:hover { transform: scale(1.04) translateY(-5px); }
+    .gallery-thumb img { width: 100%; height: auto; display: block; }
+
+    /* ── 使い方 3ステップ ── */
+    .howto-section {
+      background: var(--color-surface);
+      padding: var(--section-padding);
+    }
+    .howto-header { text-align: center; margin-bottom: 4rem; }
+    .howto-header .section-divider { margin: 1.2rem auto 0; }
+    .howto-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--container-pad);
+    }
+    .howto-step { text-align: center; position: relative; }
+    .step-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--gim-amber);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+    .step-img {
+      width: 155px;
+      margin: 0 auto 1.4rem;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(26,58,42,0.16);
+    }
+    .step-img img { width: 100%; height: auto; }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+    .step-desc { font-size: 0.83rem; color: var(--color-text-mid); line-height: 1.85; }
+    .step-connector {
+      position: absolute;
+      top: 3.2rem;
+      right: -1rem;
+      width: 2rem;
+      text-align: center;
+      color: var(--gim-amber);
+      opacity: 0.45;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    /* ── スタンプ演出紹介バナー ── */
+    .stamp-banner {
+      background: linear-gradient(135deg,
+        var(--color-primary) 0%,
+        #1a4a30 60%,
+        #0f2e1a 100%
+      );
+      padding: 5rem var(--container-pad);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stamp-banner::before {
+      content: '🏆';
+      position: absolute;
+      font-size: 18rem;
+      opacity: 0.04;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .stamp-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .stamp-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gim-amber-light);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .stamp-label::before, .stamp-label::after {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--gim-amber-light);
+    }
+    .stamp-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .stamp-title em { font-style: italic; color: var(--gim-amber-light); }
+    .stamp-desc {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+    /* スタンプ絵文字アニメーション */
+    .stamp-emojis {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .stamp-emoji {
+      font-size: 2.2rem;
+      animation: stampPop 0.6s ease both;
+      display: inline-block;
+    }
+    .stamp-emoji:nth-child(1) { animation-delay: 0s; }
+    .stamp-emoji:nth-child(2) { animation-delay: 0.1s; }
+    .stamp-emoji:nth-child(3) { animation-delay: 0.2s; }
+    .stamp-emoji:nth-child(4) { animation-delay: 0.3s; }
+    .stamp-emoji:nth-child(5) { animation-delay: 0.4s; }
+    @keyframes stampPop {
+      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+      70%  { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* ── フォトモザイク ── */
+    .photo-mosaic {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 3px;
+    }
+    .photo-mosaic-item { overflow: hidden; position: relative; }
+    .photo-mosaic-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .photo-mosaic-item:hover img { transform: scale(1.06); }
+    .photo-mosaic-item.tall { grid-row: span 2; }
+    .mosaic-caption {
+      position: absolute;
+      bottom: 1rem; left: 1rem;
+      color: rgba(255,255,255,0.82);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    /* ── フォトバナー ── */
+    .photo-banner {
+      height: 420px;
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-banner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+    .photo-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(12,34,20,0.78) 0%, rgba(12,34,20,0.2) 65%, transparent 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--container-pad);
+    }
+    .photo-banner-text { max-width: 500px; color: #fff; }
+    .photo-banner-text .section-label { color: var(--gim-amber-light); }
+    .photo-banner-text .section-label::before { background: var(--gim-amber-light); }
+    .photo-banner-text h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0.5rem 0 1.3rem;
+    }
+
+    /* ── FAQ ── */
+    .faq-section {
+      background: var(--color-bg);
+      padding: var(--section-padding);
+    }
+    .faq-header { text-align: center; margin-bottom: 3.5rem; }
+    .faq-header .section-divider { margin: 1.2rem auto 0; }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--container-pad);
+    }
+    .faq-item {
+      background: var(--color-surface);
+      border-radius: 16px;
+      border: 1px solid rgba(26,58,42,0.07);
+      overflow: hidden;
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--color-primary);
+      list-style: none;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .faq-question:hover { background: rgba(232,160,32,0.05); }
+    .faq-question::marker,
+    .faq-question::-webkit-details-marker { display: none; }
+    .faq-chevron {
+      font-size: 0.75rem;
+      color: var(--gim-amber);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    details[open] .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      padding: 1rem 1.5rem 1.3rem;
+      font-size: 0.85rem;
+      color: var(--color-text-mid);
+      line-height: 1.9;
+      border-top: 1px solid rgba(26,58,42,0.06);
+    }
+    .faq-answer a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: var(--section-padding);
+      text-align: center;
+      background: var(--color-surface);
+    }
+    .cta-section .section-label { justify-content: center; }
+    .cta-section .section-label::before { display: none; }
+    .cta-section .section-label::after {
+      content: '';
+      width: 22px; height: 1px;
+      background: var(--gim-amber);
+    }
+    .cta-section .section-heading { margin: 0.6rem auto 1.2rem; max-width: 560px; }
+    .cta-desc { font-size: 0.92rem; color: var(--color-text-mid); margin-bottom: 2.4rem; }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.6rem;
+    }
+    .cta-privacy-note {
+      font-size: 0.78rem;
+      color: var(--color-text-light);
+    }
+    .cta-privacy-note a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ── 他のアプリ ── */
+    .other-apps-section {
+      background: var(--color-bg);
+      padding: var(--section-padding);
+    }
+    .other-apps-header { text-align: center; margin-bottom: 3rem; }
+    .other-apps-header .section-divider { margin: 1.2rem auto 0; }
+    .other-apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.4rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .other-app-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 1.6rem 1.8rem;
+      border: 1px solid rgba(26,58,42,0.07);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      transition: all 0.3s;
+    }
+    .other-app-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .other-app-icon {
+      width: 52px; height: 52px;
+      border-radius: 13px;
+      background: var(--color-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .other-app-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.22rem;
+    }
+    .other-app-sub { font-size: 0.74rem; color: var(--color-text-light); letter-spacing: 0.06em; }
+
+    /* ── 開発者セクション ── */
+    .developer-section {
+      background: var(--color-primary);
+      padding: 4rem var(--container-pad);
+      text-align: center;
+    }
+    .developer-inner { max-width: var(--container-max); margin: 0 auto; }
+    .developer-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gim-amber-light);
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+    .developer-label::before, .developer-label::after {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--gim-amber-light);
+    }
+    .developer-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.8rem;
+    }
+    .developer-desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 2rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.85;
+    }
+    .developer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      background: #fff;
+      text-decoration: none;
+      padding: 0.75rem 1.8rem;
+      border-radius: var(--radius-btn);
+      transition: all 0.25s;
+    }
+    .developer-link:hover {
+      background: var(--gim-amber-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* ── レスポンシブ ── */
+    @media (max-width: 960px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 8rem;
+        gap: 3rem;
+      }
+      .hero-desc { max-width: 100%; }
+      .hero-cta { justify-content: center; }
+      .hero-phones { margin: 0 auto; }
+      .hero-phone-main { width: 190px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-intro { grid-template-columns: 1fr; gap: 2rem; }
+      .split-section { grid-template-columns: 1fr; min-height: auto; }
+      .split-section.reverse { direction: ltr; }
+      .split-photo { height: 300px; }
+      .howto-grid { grid-template-columns: 1fr; gap: 2.8rem; }
+      .step-connector { display: none; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .photo-mosaic {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 200px 200px 200px;
+      }
+      .photo-mosaic-item.tall { grid-row: span 1; }
+      .stats-inner { gap: 1.2rem; }
+      .stat-divider { display: none; }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .site-nav { padding: 0.8rem 1.4rem; }
+      .photo-banner { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ ナビゲーション ═══ -->
+  <nav class="site-nav" id="site-nav">
+    <a href="https://satopi72g.github.io/" class="nav-logo">
+      Satopi Apps
+      <span class="nav-logo-sep">ゴルフ課題メモ</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://satopi72g.github.io/">トップ</a>
+      <a href="https://satopi72g.github.io/privacy/gim-privacypolicy.html"
+         target="_blank" rel="noopener"
+         class="nav-privacy">🔒 プライバシーポリシー</a>
+    </div>
+  </nav>
+
+  <!-- ═══ ヒーロー（フルブリード写真） ═══ -->
+  <section class="hero-section">
+    <div class="hero-bg">
+      <!-- ★ practice_001：練習場シーン。課題メモらしい文脈に合致 -->
+      <img src="../../assets/images/photos/golf/practice_001.jpg"
+           alt="" aria-hidden="true" loading="eager" fetchpriority="high" />
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-content reveal">
+        <span class="hero-eyebrow">iOS App — Free Download</span>
+        <h1 class="hero-title">課題を記録して、<br><em>着実に上達する。</em></h1>
+        <p class="hero-desc">
+          練習前・練習中・練習後、いつでもすぐにゴルフの課題をメモ。達成度を星で記録し、課題を可視化。ゲーム感覚でモチベーションを維持しながら、スコアアップを目指そう。
+        </p>
+        <div class="hero-cta">
+          <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
+             target="_blank" rel="noopener"
+             class="badge-appstore">
+            <img src="../../assets/images/icons/DownloadOnTheAppStore_Badge_US_blk.png"
+                 alt="Download on the App Store" />
+          </a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog"
+             target="_blank" rel="noopener"
+             class="hero-contact">お問い合わせ →</a>
+        </div>
+      </div>
+
+      <div class="hero-phones reveal delay-2">
+        <img src="../../assets/images/screenshots/golf-issue-memo/main.png"
+             alt="ゴルフ課題メモ メイン画面"
+             class="hero-phone-main"
+             loading="eager" />
+        <img src="../../assets/images/screenshots/golf-issue-memo/Summary_01.png"
+             alt="サマリー画面"
+             class="hero-phone-sub"
+             loading="eager" />
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <div class="scroll-hint-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══ プライバシーリボン ═══ -->
+  <div class="privacy-ribbon">
+    <div class="privacy-ribbon-text">
+      <span>🔒</span>
+      アプリのプライバシーへの取り組みをご確認いただけます
+    </div>
+    <a href="https://satopi72g.github.io/privacy/gim-privacypolicy.html"
+       target="_blank" rel="noopener"
+       class="privacy-ribbon-link">プライバシーポリシーを読む →</a>
+  </div>
+
+  <!-- ═══ 統計バー ═══ -->
+  <div class="stats-bar">
+    <div class="stats-inner reveal">
+      <div class="stat-item">
+        <div class="stat-number">5<span class="stat-unit">段階</span></div>
+        <div class="stat-label">直感的な星入力</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">★★★</div>
+        <div class="stat-label">課題クローズ演出</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">ログイン不要</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">Free</div>
+        <div class="stat-label">App Store で無料配信中</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 機能紹介 ═══ -->
+  <section class="features-section">
+    <div class="container">
+      <div class="features-header reveal">
+        <span class="section-label">Features</span>
+        <h2 class="section-heading">ゴルフ課題メモの<em>主な機能</em></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card reveal delay-1">
+          <span class="feature-icon">📝</span>
+          <h3 class="feature-title">課題の登録・管理</h3>
+          <p class="feature-desc">カテゴリ・課題タイトル・ゴールを簡単に入力。重要度・対象クラブ・身体ポイントを加えれば、課題をより詳細に分類できます。</p>
+        </div>
+
+        <div class="feature-card reveal delay-2">
+          <span class="feature-icon">⭐</span>
+          <h3 class="feature-title">達成度を星で記録</h3>
+          <p class="feature-desc">練習・ラウンド後の達成度を星1〜5の直感的な操作で記録。選択式入力中心で手軽に継続できます。</p>
+          <div class="star-row" style="margin-top:0.8rem;">
+            <span>★</span><span>★</span><span>★</span>
+            <span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal delay-3">
+          <span class="feature-icon">📊</span>
+          <h3 class="feature-title">サマリー画面</h3>
+          <p class="feature-desc">未解決課題の件数・優先度ランキングを一目で確認。解決済み件数・平均解決日数・おすすめ課題も表示します。</p>
+        </div>
+
+        <div class="feature-card highlight reveal delay-1">
+          <span class="feature-icon">🎉</span>
+          <h3 class="feature-title">課題クローズ演出</h3>
+          <p class="feature-desc">課題解決時に難易度に応じたスタンプアニメーションを表示。難易度が高いほど華やかな演出で、達成感がアップします。</p>
+        </div>
+
+        <div class="feature-card reveal delay-2">
+          <span class="feature-icon">🏌️</span>
+          <h3 class="feature-title">シンプルな操作性</h3>
+          <p class="feature-desc">文字・ボタンは大きめで見やすい設計。ベテランゴルファーも直感的に操作できます。</p>
+        </div>
+
+        <div class="feature-card reveal delay-3">
+          <span class="feature-icon">📵</span>
+          <h3 class="feature-title">オフライン対応</h3>
+          <p class="feature-desc">ログイン不要、インターネット接続なしでも利用可能。コース上でも、練習場でも、いつでもどこでも使えます。</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 分割①：practice写真 × テキスト ═══ -->
+  <div class="split-section">
+    <div class="split-photo">
+      <img src="../../assets/images/photos/golf/practice_002.jpg"
+           alt="練習場" loading="lazy" />
+    </div>
+    <div class="split-content">
+      <span class="section-label">Issue Tracking</span>
+      <h2 class="section-heading">課題を記録すれば、<br><em>成長が見える。</em></h2>
+      <p>「なんとなく練習する」から卒業しよう。課題を書き出して優先度をつけることで、次の練習で何をすべきかが明確になります。積み重ねが、着実なスコアアップにつながります。</p>
+    </div>
+  </div>
+
+  <!-- ═══ スクリーンショットギャラリー ═══ -->
+  <section class="gallery-section">
+    <div class="gallery-intro">
+      <div class="reveal">
+        <span class="section-label">Screenshots</span>
+        <h2 class="section-heading">直感的な<em>UI デザイン</em></h2>
+        <div class="section-divider"></div>
+        <p style="margin-top:1.4rem;font-size:0.9rem;color:var(--color-text-mid);line-height:1.9;max-width:420px;">
+          スクロールしてスクリーンショットをご覧ください。シンプルで使いやすいデザインを追求しています。
+        </p>
+      </div>
+      <div class="reveal delay-2">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Issue_01.png"
+             alt="課題一覧画面"
+             style="width:175px;border-radius:26px;box-shadow:0 16px 50px rgba(26,58,42,0.18);"
+             loading="lazy" />
+      </div>
+    </div>
+    <div class="gallery-scroll reveal">
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Regist_01.png"
+             alt="課題登録①" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Regist_02.png"
+             alt="課題登録②" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Issue_01.png"
+             alt="課題一覧" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Summary_01.png"
+             alt="サマリー①" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Summary_02.png"
+             alt="サマリー②" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Stamp_01.png"
+             alt="スタンプ演出" loading="lazy" />
+      </div>
+      <div class="gallery-thumb">
+        <img src="../../assets/images/screenshots/golf-issue-memo/Setting_01.png"
+             alt="設定画面" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 使い方 3ステップ ═══ -->
+  <section class="howto-section">
+    <div class="container">
+      <div class="howto-header reveal">
+        <span class="section-label">How to Use</span>
+        <h2 class="section-heading">かんたん<em>3ステップ</em></h2>
+        <div class="section-divider"></div>
+      </div>
+    </div>
+    <div class="howto-grid">
+      <div class="howto-step reveal delay-1">
+        <div class="step-number">01</div>
+        <div class="step-img">
+          <img src="../../assets/images/screenshots/golf-issue-memo/Regist_01.png"
+               alt="課題を登録する" loading="lazy" />
+        </div>
+        <h3 class="step-title">課題を登録する</h3>
+        <p class="step-desc">気になったことをすぐにメモ。カテゴリや重要度も選択式でサクッと入力できます。</p>
+        <span class="step-connector" aria-hidden="true">→</span>
+      </div>
+      <div class="howto-step reveal delay-2">
+        <div class="step-number">02</div>
+        <div class="step-img">
+          <img src="../../assets/images/screenshots/golf-issue-memo/Issue_01.png"
+               alt="達成度を記録する" loading="lazy" />
+        </div>
+        <h3 class="step-title">達成度を記録する</h3>
+        <p class="step-desc">練習・ラウンドのたびに星で達成度を更新。継続することで上達の手応えが実感できます。</p>
+        <span class="step-connector" aria-hidden="true">→</span>
+      </div>
+      <div class="howto-step reveal delay-3">
+        <div class="step-number">03</div>
+        <div class="step-img">
+          <img src="../../assets/images/screenshots/golf-issue-memo/Stamp_01.png"
+               alt="課題をクローズする" loading="lazy" />
+        </div>
+        <h3 class="step-title">課題をクローズ！</h3>
+        <p class="step-desc">課題が解決したらクローズ。難易度に応じたスタンプ演出で達成感を味わおう。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ スタンプ演出バナー ═══ -->
+  <div class="stamp-banner">
+    <div class="stamp-inner reveal">
+      <div class="stamp-label">Achievement</div>
+      <h2 class="stamp-title">解決した瞬間の<br><em>達成感</em>を、もっと大きく。</h2>
+      <p class="stamp-desc">
+        課題をクローズするたびに、難易度に応じたスタンプアニメーションが登場。<br>
+        ゲーム感覚で楽しみながら、モチベーションを高く保ち続けられます。
+      </p>
+      <div class="stamp-emojis" aria-hidden="true">
+        <span class="stamp-emoji">🌟</span>
+        <span class="stamp-emoji">🏆</span>
+        <span class="stamp-emoji">🎯</span>
+        <span class="stamp-emoji">🎉</span>
+        <span class="stamp-emoji">⛳</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ フォトモザイク ═══ -->
+  <!--
+    GIM 使用写真：score_001/002, club_001/002, cart_001, cup_002
+    WGと重複なし（WGはgreen/golf/player_003使用済み）
+  -->
+  <div class="photo-mosaic">
+    <div class="photo-mosaic-item tall">
+      <img src="../../assets/images/photos/golf/score_001.jpg" alt="" loading="lazy" />
+      <span class="mosaic-caption">Score</span>
+    </div>
+    <div class="photo-mosaic-item">
+      <img src="../../assets/images/photos/golf/club_001.jpg" alt="" loading="lazy" />
+    </div>
+    <div class="photo-mosaic-item">
+      <img src="../../assets/images/photos/golf/cart_001.jpg" alt="" loading="lazy" />
+    </div>
+    <div class="photo-mosaic-item">
+      <img src="../../assets/images/photos/golf/cup_002.jpg" alt="" loading="lazy" />
+    </div>
+    <div class="photo-mosaic-item">
+      <img src="../../assets/images/photos/golf/score_002.jpg" alt="" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- ═══ フォトバナー × CTA ═══ -->
+  <div class="photo-banner">
+    <img src="../../assets/images/photos/golf/player_005.jpg"
+         alt="" aria-hidden="true" loading="lazy" />
+    <div class="photo-banner-overlay">
+      <div class="photo-banner-text reveal">
+        <span class="section-label">Level Up Your Game</span>
+        <h2>課題を制して、<br>スコアを伸ばす。</h2>
+        <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
+           target="_blank" rel="noopener"
+           class="badge-appstore badge-appstore-wht"
+           style="margin-top:1.2rem;">
+          <img src="../../assets/images/icons/DownloadOnTheAppStore_Badge_US_blk.png"
+               alt="Download on the App Store" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 分割②：スコア × テキスト（reverse） ═══ -->
+  <div class="split-section reverse">
+    <div class="split-photo">
+      <img src="../../assets/images/photos/golf/club_002.jpg"
+           alt="ゴルフクラブ" loading="lazy" />
+    </div>
+    <div class="split-content light">
+      <span class="section-label">Always Ready</span>
+      <h2 class="section-heading">いつでも、<br><em>どこでも</em>使える。</h2>
+      <p>ログイン不要・オフライン対応で、コース上でも練習場でもすぐ起動できます。大きなボタンと選択式入力で、ゴルフ後の疲れた状態でも快適に操作できます。</p>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-header reveal">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-heading">よくある<em>ご質問</em></h2>
+        <div class="section-divider"></div>
+      </div>
+    </div>
+    <div class="faq-grid">
+
+      <details class="faq-item reveal delay-1">
+        <summary class="faq-question">
+          このアプリは無料ですか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          はい、App Store で無料でダウンロードいただけます。一部機能の利用にあたって広告（AdMob）が表示される場合があります。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-2">
+        <summary class="faq-question">
+          インターネット接続は必要ですか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          インターネット接続がなくても利用できます。すべてのデータはデバイス内に保存されるため、コース上でも練習場でもご利用いただけます。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-1">
+        <summary class="faq-question">
+          ログインやアカウント登録は必要ですか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          不要です。アプリをインストールしたらすぐに使い始められます。登録したデータはすべて端末内に保存されます。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-2">
+        <summary class="faq-question">
+          登録できる課題の数に上限はありますか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          特に上限は設けていません。解決済みの課題も含めて保存されますので、長期的な記録としてお使いいただけます。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-1">
+        <summary class="faq-question">
+          スタンプ演出はどのタイミングで表示されますか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          課題をクローズ（解決済みにする）した瞬間に表示されます。設定した難易度が高いほど、より華やかなアニメーション演出になります。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-2">
+        <summary class="faq-question">
+          Android版はありますか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          現在はiOS版のみ提供しています。Android版については現時点では未定です。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-1">
+        <summary class="faq-question">
+          個人情報やデータはどのように扱われますか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          アカウント登録は不要で、クラウドへのデータ送信も行いません。詳細は
+          <a href="https://satopi72g.github.io/privacy/gim-privacypolicy.html"
+             target="_blank" rel="noopener">プライバシーポリシー</a>
+          をご覧ください。
+        </div>
+      </details>
+
+      <details class="faq-item reveal delay-2">
+        <summary class="faq-question">
+          不具合や要望はどこに送ればよいですか？
+          <span class="faq-chevron">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog"
+             target="_blank" rel="noopener">お問い合わせフォーム</a>
+          よりご連絡ください。いただいたご意見はアプリ改善に活用いたします。
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="cta-section">
+    <div class="container reveal">
+      <span class="section-label">Download Free</span>
+      <h2 class="section-heading">今すぐ無料で<br><em>はじめよう。</em></h2>
+      <p class="cta-desc">App Store から無料でダウンロードできます。</p>
+      <div class="cta-buttons">
+        <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
+           target="_blank" rel="noopener"
+           class="badge-appstore">
+          <img src="../../assets/images/icons/DownloadOnTheAppStore_Badge_US_blk.png"
+               alt="Download on the App Store" />
+        </a>
+      </div>
+      <p class="cta-privacy-note">
+        🔒 <a href="https://satopi72g.github.io/privacy/gim-privacypolicy.html"
+              target="_blank" rel="noopener">プライバシーポリシー</a>はこちらからご確認いただけます。
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 他のアプリ ═══ -->
+  <section class="other-apps-section">
+    <div class="container">
+      <div class="other-apps-header reveal">
+        <span class="section-label">Other Apps</span>
+        <h2 class="section-heading">他の<em>アプリ</em>もチェック</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="other-apps-grid reveal delay-1">
+        <a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964"
+           target="_blank" rel="noopener"
+           class="other-app-card">
+          <div class="other-app-icon">🌤️</div>
+          <div>
+            <div class="other-app-name">Weather Golf</div>
+            <div class="other-app-sub">ゴルフ場天気 &amp; スコア影響分析 · iOS · 無料</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 開発者紹介 ═══ -->
+  <section class="developer-section">
+    <div class="developer-inner reveal">
+      <div class="developer-label">Developer</div>
+      <h2 class="developer-title">Satopi Apps</h2>
+      <p class="developer-desc">
+        ゴルフをもっと楽しくするアプリを個人開発しています。<br>
+        Weather Golf、ゴルフ課題メモ など、シンプルで使いやすいツールをお届けします。
+      </p>
+      <a href="https://satopi72g.github.io/" class="developer-link">
+        開発者ページを見る →
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ フッター ═══ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <a href="https://satopi72g.github.io/" class="footer-brand">Satopi Apps</a>
+        <p class="footer-tagline">Golf × Issue × Achievement</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://satopi72g.github.io/">開発者トップページ</a>
+        <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
+           target="_blank" rel="noopener">App Store — ゴルフ課題メモ</a>
+        <a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964"
+           target="_blank" rel="noopener">App Store — Weather Golf</a>
+        <a href="https://satopi72g.github.io/privacy/gim-privacypolicy.html"
+           target="_blank" rel="noopener">プライバシーポリシー</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog"
+           target="_blank" rel="noopener">お問い合わせ</a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Satopi Apps. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="../../assets/js/common.js"></script>
+  <script>
+    // ── ナビ：スクロールで背景切替
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── スクロールリビール
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
