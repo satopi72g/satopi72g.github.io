@@ -11,14 +11,13 @@
   <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="assets/css/common.css" />
-
-  <!-- Google Search Consoleに追加 -->
   <meta name="google-site-verification" content="CyTBpFzF9XwPxXit7ou4_xA_aoGtVWUGOdfhGisaKk0" />
-  
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
 
     /* ══════════════════════════════════════════
-       ① HERO
+       ① HERO（変更なし・完全保持）
     ══════════════════════════════════════════ */
     .hero {
       position: relative;
@@ -74,8 +73,7 @@
     .hero-eyebrow::before {
       content: '';
       display: block;
-      width: 32px;
-      height: 1px;
+      width: 32px; height: 1px;
       background: var(--color-accent);
     }
     .hero-title {
@@ -125,221 +123,207 @@
     }
     .hero-scroll::after {
       content: '';
-      width: 1px;
-      height: 40px;
+      width: 1px; height: 40px;
       background: linear-gradient(to bottom, rgba(255,255,255,0.32), transparent);
     }
 
 
     /* ══════════════════════════════════════════
-       ② APPS
+       ② APPS — 写真フルブリード刷新版
     ══════════════════════════════════════════ */
     .apps-section { background: var(--color-bg); }
 
+    /* --- アプリカード本体 --- */
     .app-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: var(--color-surface);
+      position: relative;
       border-radius: var(--radius-card);
       overflow: hidden;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 3rem;
-      transition: box-shadow 0.3s, transform 0.3s;
+      margin-bottom: 3.5rem;
+      box-shadow: 0 8px 48px rgba(26,58,42,0.18);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
-    .app-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-5px); }
-    .app-card.reverse          { direction: rtl; }
-    .app-card.reverse > *      { direction: ltr; }
+    .app-card:hover { transform: translateY(-6px); box-shadow: 0 20px 72px rgba(26,58,42,0.26); }
 
-    .card-visual {
-      position: relative;
-      min-height: 400px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card-visual-bg {
+    /* 背景写真 */
+    .app-card-bg {
       position: absolute;
       inset: 0;
       background-size: cover;
       background-position: center;
-      transition: transform 0.6s ease;
+      transition: transform 0.8s ease;
     }
-    .app-card:hover .card-visual-bg { transform: scale(1.05); }
-    .card-visual-overlay {
+    .app-card:hover .app-card-bg { transform: scale(1.04); }
+    .app-card-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(8,24,16,0.78) 0%, rgba(24,56,38,0.52) 100%);
+    }
+    /* WG: 右→左グラデ（スクショ右側、テキスト左側） */
+    .app-card.wg .app-card-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(8,24,16,0.92) 0%,
+        rgba(8,24,16,0.80) 40%,
+        rgba(8,24,16,0.30) 70%,
+        rgba(8,24,16,0.08) 100%
+      );
+    }
+    /* GIM: 左→右グラデ（テキスト右側） */
+    .app-card.gim .app-card-overlay {
+      background: linear-gradient(
+        to left,
+        rgba(8,24,16,0.92) 0%,
+        rgba(8,24,16,0.80) 40%,
+        rgba(8,24,16,0.30) 70%,
+        rgba(8,24,16,0.08) 100%
+      );
     }
 
-    .iphone-mock {
+    /* カード内レイアウト */
+    .app-card-inner {
       position: relative;
       z-index: 2;
-      width: 155px;
-      transform: rotate(-2deg);
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.55));
-      transition: transform 0.4s ease;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+      align-items: center;
     }
-    .app-card:hover .iphone-mock { transform: rotate(0deg) translateY(-7px); }
-    .iphone-body {
-      width: 155px;
-      height: 310px;
-      background: #0d0d0d;
-      border-radius: 30px;
-      border: 2px solid rgba(255,255,255,0.16);
-      overflow: hidden;
-      position: relative;
-    }
-    .iphone-screen {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top;
-      border-radius: 28px;
-    }
-    .iphone-notch {
-      position: absolute;
-      top: 9px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 52px;
-      height: 9px;
-      background: #0d0d0d;
-      border-radius: 5px;
-      z-index: 5;
-    }
+    .app-card.gim .app-card-inner { direction: rtl; }
+    .app-card.gim .app-card-inner > * { direction: ltr; }
 
-    .card-body {
-      padding: 2.8rem 3rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    /* テキストパネル */
+    .app-text-panel {
+      padding: 3.5rem 3.5rem 3.5rem 4rem;
+    }
+    .app-card.gim .app-text-panel { padding: 3.5rem 4rem 3.5rem 3.5rem; }
+
+    .app-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent-light);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .app-eyebrow::before {
+      content: '';
+      width: 18px; height: 1px;
+      background: var(--color-accent-light);
     }
     .app-name {
       font-family: var(--font-display);
-      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
       font-weight: 700;
-      color: var(--color-primary);
-      line-height: 1.15;
-      margin: 0.8rem 0 0.3rem;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
     }
     .app-name-sub {
       font-size: 0.68rem;
       letter-spacing: 0.16em;
-      color: var(--color-text-light);
+      color: rgba(255,255,255,0.45);
       text-transform: uppercase;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.3rem;
     }
     .app-desc {
       font-size: 0.87rem;
       line-height: 1.95;
-      color: var(--color-text-mid);
+      color: rgba(255,255,255,0.72);
       font-weight: 300;
       margin-bottom: 1.4rem;
+      max-width: 400px;
     }
     .feature-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.8rem;
+      gap: 0.45rem;
+      margin-bottom: 2rem;
     }
     .feature-list li {
       display: flex;
       align-items: flex-start;
-      gap: 0.65rem;
-      font-size: 0.82rem;
-      color: var(--color-text-mid);
+      gap: 0.6rem;
+      font-size: 0.81rem;
+      color: rgba(255,255,255,0.65);
       line-height: 1.5;
     }
     .feature-list li::before {
       content: '';
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 15px; height: 15px;
       flex-shrink: 0;
       margin-top: 1px;
       border-radius: 50%;
-      background: #e8f5e9;
+      background: rgba(82,183,136,0.2);
       border: 1.5px solid var(--color-accent);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,5 4,7 8,3' stroke='%2352b788' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-size: 8px;
       background-repeat: no-repeat;
       background-position: center;
     }
-
-    /* ─── カードのCTAボタン2種 ─── */
-    .card-ctas {
+    .app-ctas {
       display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
       align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-
-    /* 詳しく見るボタン：塗りつぶし＋矢印 */
+    /* App Store SVGバッジ */
+    .badge-appstore {
+      display: inline-block;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .badge-appstore:hover { transform: translateY(-2px); opacity: 0.88; }
+    .badge-appstore img { height: 40px; width: auto; display: block; }
+    /* 詳しく見るボタン */
     .btn-detail {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--color-primary);
+      background: rgba(255,255,255,0.12);
       color: #fff;
       font-size: 0.82rem;
       font-weight: 500;
-      padding: 0.7rem 1.3rem;
+      padding: 0.65rem 1.3rem;
       border-radius: var(--radius-btn);
       text-decoration: none;
       letter-spacing: 0.04em;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      border: 1px solid rgba(255,255,255,0.22);
+      transition: background 0.2s, transform 0.2s;
     }
-    .btn-detail:hover {
-      background: #2d6a4f;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(26,58,42,0.22);
-    }
-    .btn-detail svg { width: 14px; height: 14px; stroke: currentColor; fill: none; transition: transform 0.2s; }
+    .btn-detail:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
+    .btn-detail svg { width: 13px; height: 13px; stroke: currentColor; fill: none; transition: transform 0.2s; }
     .btn-detail:hover svg { transform: translateX(3px); }
 
-    /* App Storeボタン：黒背景＋Appleアイコン（公式スタイル） */
-    .btn-appstore {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      background: #000;
-      color: #fff;
-      padding: 0.6rem 1.2rem;
-      border-radius: 10px;
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.15);
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    /* スクショパネル */
+    .app-phones-panel {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 2rem 2rem 2.5rem;
+      gap: 1rem;
+      position: relative;
     }
-    .btn-appstore:hover {
-      background: #1a1a1a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    .app-phone {
+      border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+      transition: transform 0.4s ease;
+      background: #0d0d0d;
     }
-    .btn-appstore-icon { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
-    .btn-appstore-text { display: flex; flex-direction: column; line-height: 1.2; }
-    .btn-appstore-sub  { font-size: 0.58rem; letter-spacing: 0.04em; color: rgba(255,255,255,0.75); }
-    .btn-appstore-main { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.01em; }
+    .app-phone img { width: 100%; height: auto; display: block; }
+    .app-phone-main { width: 150px; position: relative; z-index: 2; }
+    .app-phone-sub  { width: 110px; margin-bottom: 16px; opacity: 0.88; }
+    .app-card:hover .app-phone-main { transform: translateY(-8px) rotate(-1deg); }
+    .app-card:hover .app-phone-sub  { transform: translateY(-4px) rotate(1.5deg); }
 
-    /* 承認待ちの無効ボタン */
-    .btn-appstore-disabled {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      background: #888;
-      color: #fff;
-      padding: 0.6rem 1.2rem;
-      border-radius: 10px;
-      cursor: default;
-      pointer-events: none;
-    }
-    .btn-appstore-disabled .btn-appstore-sub  { font-size: 0.58rem; color: rgba(255,255,255,0.7); }
-    .btn-appstore-disabled .btn-appstore-main { font-size: 0.85rem; font-weight: 600; }
+    /* badge badge-live は common.css を使用 */
 
 
     /* ══════════════════════════════════════════
-       ③ CONCEPT
+       ③ CONCEPT（変更なし）
     ══════════════════════════════════════════ */
     .concept-section {
       background: var(--color-primary);
@@ -412,11 +396,8 @@
     .metric-item:hover { background: rgba(82,183,136,0.07); }
     .metric-icon {
       font-size: 1.4rem;
-      width: 46px;
-      height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 46px; height: 46px;
+      display: flex; align-items: center; justify-content: center;
       background: rgba(82,183,136,0.12);
       border-radius: 12px;
       flex-shrink: 0;
@@ -437,73 +418,125 @@
 
 
     /* ══════════════════════════════════════════
-       ④ DEVELOPER
+       ④ DEVELOPER — 写真フルブリード刷新版
     ══════════════════════════════════════════ */
-    .developer-section { background: var(--color-bg); }
-
-    .developer-inner {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-    .dev-profile-card {
-      background: var(--color-surface);
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
-      box-shadow: var(--shadow-card);
-      text-align: center;
-      position: sticky;
-      top: 2rem;
-    }
-    .dev-avatar-placeholder {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--color-primary), #2d6a4f);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-size: 2.2rem;
-      border: 3px solid var(--color-accent);
-    }
-    .dev-name {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 0.2rem;
-    }
-    .dev-role {
-      font-size: 0.67rem;
-      letter-spacing: 0.18em;
-      color: var(--color-text-light);
-      text-transform: uppercase;
-      margin-bottom: 1.4rem;
+    .developer-section {
+      background: var(--color-bg);
+      padding: 0 !important; /* section padding を上書き */
+      overflow: hidden;
     }
 
-    /* プロフィール情報リスト */
-    .dev-info-list {
-      list-style: none;
-      text-align: left;
-      border-top: 1px solid rgba(26,58,42,0.08);
-      padding-top: 1.2rem;
+    /* 上部：写真フルブリード */
+    .dev-photo-hero {
+      position: relative;
+      height: 520px;
+      overflow: hidden;
+    }
+    .dev-photo-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      transition: transform 0.8s ease;
+    }
+    .dev-photo-hero:hover img { transform: scale(1.03); }
+    .dev-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(10,26,16,0.15) 0%,
+        rgba(10,26,16,0.05) 50%,
+        rgba(10,26,16,0.72) 100%
+      );
+    }
+    /* 写真右側のキャプション */
+    .dev-photo-caption {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 42%;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
+      justify-content: center;
+      padding: 3rem 4rem;
+      z-index: 1;
     }
-    .dev-info-list li {
+    .dev-photo-caption .section-label {
+      color: var(--color-accent-light);
+      margin-bottom: 0.8rem;
+    }
+    .dev-photo-caption .section-label::before { background: var(--color-accent-light); }
+    .dev-name-hero {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+    .dev-role-hero {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.6rem;
+    }
+    .dev-tags {
       display: flex;
-      align-items: baseline;
-      gap: 0.6rem;
-      font-size: 0.78rem;
-      color: var(--color-text-mid);
-      font-weight: 300;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-    .dev-info-list li span:first-child {
-      font-size: 0.9rem;
-      flex-shrink: 0;
+    .dev-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 0.28rem 0.75rem;
+      border-radius: 100px;
+    }
+
+    /* 下部：プロフィールテキスト */
+    .dev-bio-section {
+      padding: var(--section-padding);
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+      /* section padding 上書きのため明示 */
+      padding: 5rem var(--container-pad);
+    }
+    .dev-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(26,58,42,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(26,58,42,0.1);
+      align-self: start;
+    }
+    .dev-info-cell {
+      background: var(--color-surface);
+      padding: 1.4rem 1.6rem;
+      transition: background 0.2s;
+    }
+    .dev-info-cell:hover { background: rgba(82,183,136,0.04); }
+    .dev-info-icon { font-size: 1.3rem; margin-bottom: 0.4rem; display: block; }
+    .dev-info-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .dev-info-value {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--color-primary);
     }
 
     .dev-bio-heading {
@@ -525,61 +558,88 @@
 
 
     /* ══════════════════════════════════════════
-       ⑤ POLICY（3項目に絞りシャープに）
+       ⑤ POLICY — 番号を Oswald で大きく・明確に
     ══════════════════════════════════════════ */
     .policy-section {
-      background: var(--color-bg);
+      background: var(--color-surface);
       border-top: 1px solid rgba(26,58,42,0.08);
     }
     .policy-list {
       margin-top: 3rem;
-      border: 1px solid rgba(26,58,42,0.1);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    .policy-row {
       display: grid;
-      grid-template-columns: 56px 1fr 2.4fr;
-      align-items: center;
-      padding: 1.8rem 2.2rem;
-      gap: 2rem;
-      transition: background 0.2s;
-      border-top: 1px solid rgba(26,58,42,0.07);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.6rem;
     }
-    .policy-row:first-child { border-top: none; }
-    .policy-row:hover { background: rgba(82,183,136,0.04); }
-    .policy-num {
-      font-family: var(--font-display);
-      font-size: 2rem;
+    .policy-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 2.4rem 2rem 2rem;
+      border: 1px solid rgba(26,58,42,0.07);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .policy-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    /* アクセントライン */
+    .policy-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+    }
+    /* 大きな番号 — 背景に薄く */
+    .policy-num-bg {
+      font-family: 'Oswald', sans-serif;
+      font-size: 6rem;
       font-weight: 700;
-      color: rgba(82,183,136,0.22);
+      color: rgba(82,183,136,0.08);
       line-height: 1;
-      letter-spacing: -0.02em;
+      position: absolute;
+      top: 0.8rem;
+      right: 1.2rem;
+      letter-spacing: -0.03em;
+      pointer-events: none;
+      user-select: none;
     }
+    /* 前面の番号バッジ */
+    .policy-num-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      background: rgba(82,183,136,0.12);
+      border: 1.5px solid rgba(82,183,136,0.3);
+      border-radius: 100px;
+      padding: 0.2rem 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+    .policy-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.8rem; }
     .policy-title {
-      font-size: 0.92rem;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--color-primary);
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
+      margin-bottom: 0.7rem;
+      line-height: 1.3;
     }
-    .policy-emoji { font-size: 1.1rem; }
     .policy-text {
       font-size: 0.83rem;
       color: var(--color-text-mid);
-      line-height: 1.85;
+      line-height: 1.9;
       font-weight: 300;
     }
 
 
     /* ══════════════════════════════════════════
-       ⑥ UPDATES（JSONから動的生成）
+       ⑥ UPDATES（変更なし）
     ══════════════════════════════════════════ */
     .updates-section { background: #f0ede6; }
-
     .updates-list { margin-top: 2.5rem; }
-
     .update-item {
       display: grid;
       grid-template-columns: 110px 1fr;
@@ -591,10 +651,7 @@
       transform: translateY(10px);
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .update-item.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .update-item.loaded { opacity: 1; transform: translateY(0); }
     .update-item:first-child { border-top: 1px solid rgba(26,58,42,0.08); }
     .update-date {
       font-size: 0.73rem;
@@ -619,7 +676,7 @@
 
 
     /* ══════════════════════════════════════════
-       ⑦ CONTACT
+       ⑦ CONTACT（変更なし）
     ══════════════════════════════════════════ */
     .contact-section {
       background: var(--color-primary);
@@ -680,21 +737,18 @@
 
 
     /* ══════════════════════════════════════════
-       ⑧ FOOTER — 洗練版
+       ⑧ FOOTER（変更なし）
     ══════════════════════════════════════════ */
     .site-footer {
       background: #0a1a10;
       position: relative;
       overflow: hidden;
     }
-
-    /* 背景：対角線グラデーション＋グリッド */
     .site-footer::before {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(135deg, rgba(82,183,136,0.04) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(82,183,136,0.04) 0%, transparent 60%);
       pointer-events: none;
     }
     .site-footer::after {
@@ -707,7 +761,6 @@
       background-size: 56px 56px;
       pointer-events: none;
     }
-
     .footer-main {
       position: relative;
       z-index: 1;
@@ -719,8 +772,6 @@
       gap: 4rem;
       align-items: start;
     }
-
-    /* 左：ブランド */
     .footer-logo {
       font-family: var(--font-display);
       font-size: 2.2rem;
@@ -733,7 +784,6 @@
       transition: color 0.2s;
     }
     .footer-logo:hover { color: var(--color-accent); }
-
     .footer-tagline {
       font-size: 0.8rem;
       color: rgba(255,255,255,0.38);
@@ -742,13 +792,7 @@
       letter-spacing: 0.04em;
       margin-bottom: 1.8rem;
     }
-
-    /* アプリバッジ的なリンク */
-    .footer-app-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
+    .footer-app-links { display: flex; flex-direction: column; gap: 0.6rem; }
     .footer-app-link {
       display: flex;
       align-items: center;
@@ -767,11 +811,8 @@
     }
     .footer-app-link-icon {
       font-size: 1.2rem;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
       background: rgba(82,183,136,0.12);
       border-radius: 8px;
       flex-shrink: 0;
@@ -795,8 +836,6 @@
       transition: transform 0.2s;
     }
     .footer-app-link:hover .footer-app-link-arrow { transform: translateX(3px); }
-
-    /* 中・右：ナビ */
     .footer-nav-col {}
     .footer-nav-heading {
       font-size: 0.6rem;
@@ -826,15 +865,12 @@
     .footer-nav-list a::before {
       content: '';
       display: block;
-      width: 12px;
-      height: 1px;
+      width: 12px; height: 1px;
       background: rgba(82,183,136,0.35);
       flex-shrink: 0;
       transition: width 0.2s;
     }
     .footer-nav-list a:hover::before { width: 18px; }
-
-    /* 水平区切り線 */
     .footer-divider {
       position: relative;
       z-index: 1;
@@ -842,12 +878,7 @@
       margin: 0 auto;
       padding: 0 var(--container-pad);
     }
-    .footer-divider hr {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-
-    /* コピーライトバー */
+    .footer-divider hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
     .footer-bottom {
       position: relative;
       z-index: 1;
@@ -860,55 +891,53 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    .footer-copy {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.2);
-      letter-spacing: 0.06em;
-    }
-    .footer-made {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.18);
-      letter-spacing: 0.04em;
-    }
+    .footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.06em; }
+    .footer-made { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.04em; }
     .footer-made span { color: rgba(82,183,136,0.5); }
 
 
     /* ══════════════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════════════ */
-    @media (max-width: 900px) {
-      .concept-inner   { grid-template-columns: 1fr; gap: 3rem; }
-      .developer-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-      .dev-profile-card {
-        position: static;
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        text-align: left;
-      }
-      .dev-avatar-placeholder { margin: 0; width: 80px; height: 80px; font-size: 1.8rem; flex-shrink: 0; }
-      .dev-info-list { border-top: none; padding-top: 0; }
-      .policy-row { grid-template-columns: 48px 1fr; }
-      .policy-text { display: none; }
+    @media (max-width: 960px) {
+      .app-card-inner { grid-template-columns: 1fr; min-height: auto; }
+      .app-card.gim .app-card-inner { direction: ltr; }
+      .app-card.gim .app-text-panel { padding: 2.5rem; }
+      .app-text-panel { padding: 2.5rem; }
+      .app-card-overlay { background: rgba(8,24,16,0.78) !important; }
+      .app-phones-panel { padding: 1.5rem 2rem 2rem; justify-content: center; }
+      .dev-photo-hero { height: 420px; }
+      .dev-photo-caption { width: 55%; padding: 2rem 2.5rem; }
+      .dev-bio-section { grid-template-columns: 1fr; gap: 3rem; padding: 4rem var(--container-pad); }
+      .concept-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .policy-list { grid-template-columns: 1fr; gap: 1rem; }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
     }
-
     @media (max-width: 680px) {
-      .app-card, .app-card.reverse { grid-template-columns: 1fr; direction: ltr !important; }
-      .app-card.reverse > * { direction: ltr; }
-      .card-visual { min-height: 240px; }
-      .card-body { padding: 2rem 1.6rem; }
-      .policy-row { grid-template-columns: 1fr; padding: 1.4rem 1.4rem; gap: 0.4rem; }
-      .policy-num { display: none; }
-      .policy-text { display: block; }
+      .dev-photo-hero { height: 320px; }
+      .dev-photo-overlay {
+        background: linear-gradient(to bottom,
+          rgba(10,26,16,0.2) 0%,
+          rgba(10,26,16,0.75) 70%,
+          rgba(10,26,16,0.88) 100%
+        ) !important;
+      }
+      .dev-photo-caption {
+        width: 100%;
+        top: auto; bottom: 0; right: 0;
+        padding: 1.5rem 1.8rem;
+      }
+      .dev-name-hero { font-size: 1.8rem; }
+      .app-phones-panel { padding-top: 0; }
       .footer-main { grid-template-columns: 1fr; gap: 2rem; padding: 3rem var(--container-pad) 2.5rem; }
       .update-item { grid-template-columns: 1fr; gap: 0.35rem; }
+      .dev-info-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ① HERO -->
+<!-- ① HERO（完全保持） -->
 <header class="hero" id="top">
   <div class="hero-bg-fallback"></div>
   <div class="hero-bg"></div>
@@ -916,7 +945,6 @@
   <div class="hero-texture"></div>
   <div class="hero-content container">
     <p class="hero-eyebrow">iOS Apps — Made in Japan</p>
-    <!-- ★ キャッチコピーはここを変えてください -->
     <h1 class="hero-title">Small Apps,<br/><em>Big Difference.</em></h1>
     <p class="hero-sub">
       日常のちょっとした不便を、<br/>
@@ -932,105 +960,100 @@
 </header>
 
 
-<!-- ② APPS
-     【アプリ追加方法】.app-card ブロックをコピーして末尾に追加。
-     偶数番目は class="app-card reverse" にする。
-     【承認後の対応】btn-appstore-disabled を btn-appstore に変え、href を追加。 -->
+<!-- ② APPS -->
 <section class="apps-section section" id="apps">
   <div class="container">
     <p class="section-label">Apps</p>
     <h2 class="section-heading">リリース中のアプリ</h2>
     <div class="section-divider"></div>
+  </div>
 
-    <!-- Weather Golf -->
-    <article class="app-card reveal" style="margin-top:3rem;"
-      itemscope itemtype="https://schema.org/MobileApplication">
-      <meta itemprop="operatingSystem" content="iOS" />
-      <meta itemprop="applicationCategory" content="Sports" />
-      <a href="apps/weather-golf/" class="card-visual">
-        <div class="card-visual-bg" style="background-image:url('assets/images/photos/golf/green_002.jpg');"></div>
-        <div class="card-visual-overlay"></div>
-        <div class="iphone-mock">
-          <div class="iphone-body">
-            <img class="iphone-screen" src="assets/images/screenshots/weather-golf/main.png" alt="Weather Golf スクリーンショット" />
-            <div class="iphone-notch"></div>
-          </div>
-        </div>
-      </a>
-      <div class="card-body">
-        <div class="badge badge-live"><span class="badge-dot"></span> App Store 公開中</div>
+  <!-- ── Weather Golf ── -->
+  <article class="app-card wg reveal" style="margin-top:3rem;"
+    itemscope itemtype="https://schema.org/MobileApplication">
+    <meta itemprop="operatingSystem" content="iOS" />
+    <meta itemprop="applicationCategory" content="Sports" />
+
+    <!-- 背景写真 -->
+    <div class="app-card-bg" style="background-image:url('assets/images/photos/golf/green_002.jpg');"></div>
+    <div class="app-card-overlay"></div>
+
+    <div class="app-card-inner">
+      <!-- テキスト（左） -->
+      <div class="app-text-panel">
+        <span class="app-eyebrow">iOS App · Free</span>
+        <div class="badge badge-live" style="margin-bottom:0.8rem;"><span class="badge-dot"></span> App Store 公開中</div>
         <h3 class="app-name" itemprop="name">Weather Golf</h3>
         <p class="app-name-sub">ゴルフ場天気 &amp; スコア影響分析</p>
         <p class="app-desc" itemprop="description">
-          ラウンド前に「天候によるゴルフ影響」を確認。
-          楽天GORAのゴルフ場データと気象情報を組み合わせ、
-          風速・気温・降水がスコアに与える影響を数値で可視化します。
+          ラウンド前に「天候によるゴルフ影響」を確認。楽天GORAのゴルフ場データと気象情報を組み合わせ、風速・気温・降水がスコアに与える影響を数値で可視化します。
         </p>
         <ul class="feature-list">
           <li>ゴルフ場ごとの3日間詳細天気予報</li>
           <li>スコアへの影響を飛距離・攻略・快適性で表示</li>
-          <li>楽天GORAのコース検索・予約と連携</li>
+          <li>楽天GORAで1,900以上のコースを検索</li>
           <li>完全無料・ログイン不要</li>
         </ul>
-        <div class="card-ctas">
-          <!-- App Storeボタン ★URLはここを変えてください -->
+        <div class="app-ctas">
+          <!-- ★ App Store SVGバッジ（黒） -->
           <a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964"
-             class="btn-appstore" target="_blank" rel="noopener" itemprop="downloadUrl">
-            <svg class="btn-appstore-icon" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            <span class="btn-appstore-text">
-              <span class="btn-appstore-sub">Download on the</span>
-              <span class="btn-appstore-main">App Store</span>
-            </span>
+             class="badge-appstore" target="_blank" rel="noopener" itemprop="downloadUrl">
+            <img src="assets/images/icons/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg"
+                 alt="Download on the App Store" />
           </a>
-          <!-- 詳しく見るボタン -->
           <a href="apps/weather-golf/" class="btn-detail">
             詳しく見る
             <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </a>
         </div>
       </div>
-    </article>
 
-    <!-- ゴルフ課題メモ -->
-    <article class="app-card reverse reveal delay-1"
-      itemscope itemtype="https://schema.org/MobileApplication">
-      <meta itemprop="operatingSystem" content="iOS" />
-      <meta itemprop="applicationCategory" content="Sports" />
-      <div class="card-visual">
-        <div class="card-visual-bg" style="background-image:url('assets/images/photos/golf/cup_002.jpg');"></div>
-        <div class="card-visual-overlay"></div>
-        <div class="iphone-mock">
-          <div class="iphone-body" style="background:#0f1f14;">
-            <img class="iphone-screen" src="assets/images/screenshots/golf-issue-memo/main.png" alt="ゴルフ課題メモ スクリーンショット" />
-            <div class="iphone-notch"></div>
-          </div>
+      <!-- スクショ（右） -->
+      <div class="app-phones-panel">
+        <div class="app-phone app-phone-sub">
+          <img src="assets/images/screenshots/weather-golf/GolfWeather_02.png"
+               alt="Weather Golf 天気詳細" loading="lazy" />
+        </div>
+        <div class="app-phone app-phone-main">
+          <img src="assets/images/screenshots/weather-golf/main.png"
+               alt="Weather Golf メイン" loading="lazy" />
         </div>
       </div>
-      <div class="card-body">
-        <!-- <div class="badge badge-soon"><span class="badge-dot"></span> 近日公開予定</div> -->
-        <div class="badge badge-live"><span class="badge-dot"></span> App Store 公開中</div>
+    </div>
+  </article>
+
+  <!-- ── ゴルフ課題メモ ── -->
+  <article class="app-card gim reveal delay-1"
+    itemscope itemtype="https://schema.org/MobileApplication">
+    <meta itemprop="operatingSystem" content="iOS" />
+    <meta itemprop="applicationCategory" content="Sports" />
+
+    <!-- 背景写真 -->
+    <div class="app-card-bg" style="background-image:url('assets/images/photos/golf/practice_002.jpg');"></div>
+    <div class="app-card-overlay"></div>
+
+    <div class="app-card-inner">
+      <!-- テキスト（右） -->
+      <div class="app-text-panel">
+        <span class="app-eyebrow">iOS App · Free</span>
+        <div class="badge badge-live" style="margin-bottom:0.8rem;"><span class="badge-dot"></span> App Store 公開中</div>
         <h3 class="app-name" itemprop="name">ゴルフ課題メモ</h3>
         <p class="app-name-sub">Golf Issue Memo</p>
         <p class="app-desc" itemprop="description">
-          「また同じミスをした」をなくすためのアプリ。
-          ラウンドや練習で気づいた課題をその場でメモし、
-          タグで整理・優先度で管理して着実に上達へ繋げます。
+          「また同じミスをした」をなくすためのアプリ。ラウンドや練習で気づいた課題をその場でメモし、達成度を星で記録。ゲーム感覚で課題をクローズしながら着実に上達できます。
         </p>
         <ul class="feature-list">
           <li>課題・改善点をワンタップで記録</li>
-          <li>タグ・カテゴリで整理、絞り込み検索</li>
-          <li>優先度設定で練習の方向性を明確化</li>
-          <li>シンプルUI・無料・ログイン不要</li>
+          <li>達成度を星1〜5で直感的に入力</li>
+          <li>優先度・サマリーで練習の方向性を明確化</li>
+          <li>課題クローズ時のスタンプ演出でやる気アップ</li>
         </ul>
-        <div class="card-ctas">
-          <!-- App Storeボタン ★URLはここを変えてください -->
+        <div class="app-ctas">
+          <!-- ★ App Store SVGバッジ（白） ← 暗背景なので白を使用 -->
           <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
-             class="btn-appstore" target="_blank" rel="noopener" itemprop="downloadUrl">
-            <svg class="btn-appstore-icon" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            <span class="btn-appstore-text">
-              <span class="btn-appstore-sub">Download on the</span>
-              <span class="btn-appstore-main">App Store</span>
-            </span>
+             class="badge-appstore" target="_blank" rel="noopener" itemprop="downloadUrl">
+            <img src="assets/images/icons/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg"
+                 alt="Download on the App Store" />
           </a>
           <a href="apps/golf-issue-memo/" class="btn-detail">
             詳しく見る
@@ -1038,19 +1061,30 @@
           </a>
         </div>
       </div>
-    </article>
 
-    <!-- ★★★ 新しいアプリはここに追加 ★★★ -->
-  </div>
+      <!-- スクショ（左） -->
+      <div class="app-phones-panel">
+        <div class="app-phone app-phone-main">
+          <img src="assets/images/screenshots/golf-issue-memo/main.png"
+               alt="ゴルフ課題メモ メイン" loading="lazy" />
+        </div>
+        <div class="app-phone app-phone-sub">
+          <img src="assets/images/screenshots/golf-issue-memo/Summary_01.png"
+               alt="ゴルフ課題メモ サマリー" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ★★★ 新しいアプリはここに追加 ★★★ -->
+
 </section>
 
 
-<!-- ③ CONCEPT
-     ★ 文章・指標はここを変えてください -->
+<!-- ③ CONCEPT（変更なし） -->
 <section class="concept-section section">
   <div class="container">
     <div class="concept-inner">
-
       <div class="concept-left reveal">
         <p class="section-label" style="color:var(--color-accent-light);">Concept</p>
         <h2 class="concept-statement">
@@ -1063,7 +1097,6 @@
           ゴルフ・学習・仕事・日常生活、あらゆるシーンで役立つアプリを届けていきます。
         </p>
       </div>
-
       <div class="concept-metrics reveal delay-2">
         <div class="metric-item">
           <div class="metric-icon">💡</div>
@@ -1094,67 +1127,89 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 
-<!-- ④ DEVELOPER
-     ★ 名前・見出し・本文はここを変えてください -->
+<!-- ④ DEVELOPER — 写真フルブリード刷新版 -->
 <section class="developer-section section" id="developer">
-  <div class="container">
-    <p class="section-label">Developer</p>
-    <h2 class="section-heading">開発者について</h2>
-    <div class="section-divider" style="margin-bottom:3.5rem;"></div>
 
-    <div class="developer-inner">
+  <!-- 上部：フルブリード写真 -->
+  <div class="dev-photo-hero">
+    <!--
+      ★★★ 黄色ウェアの写真をここに設定してください ★★★
+      現在は assets/images/photos/common/avatar.jpg を参照しています。
+      写真がない場合は assets/images/photos/golf/player_006.jpg に変更してください。
+    -->
+    <img src="assets/images/photos/common/avatar.jpg"
+         onerror="this.src='assets/images/photos/golf/golf_005.jpg'"
+         alt="開発者 Satoshi Ohara" loading="lazy" />
+    <div class="dev-photo-overlay"></div>
+    <div class="dev-photo-caption reveal">
+      <p class="section-label">Developer</p>
+      <h2 class="dev-name-hero">Satoshi Ohara</h2>
+      <p class="dev-role-hero">iOS App Developer</p>
+      <div class="dev-tags">
+        <span class="dev-tag">⛳ Golf</span>
+        <span class="dev-tag">📷 Camera</span>
+        <span class="dev-tag">🛠️ Maker</span>
+        <span class="dev-tag">🍎 SwiftUI</span>
+      </div>
+    </div>
+  </div>
 
-      <div class="reveal">
-        <div class="dev-profile-card">
-          <!--
-            写真を使う場合はこちらに差し替え:
-            <img class="dev-avatar" src="assets/images/photos/common/avatar.jpg" alt="開発者写真" />
-          -->
-          <div class="dev-avatar-placeholder">🏌️</div>
-          <div>
-            <p class="dev-name">Satoshi Ohara</p>
-            <p class="dev-role">Developer</p>
-          </div>
-          <!-- ★ プロフィール情報はここを変えてください -->
-          <ul class="dev-info-list">
-            <li><span>🏢</span><span>会社勤務</span></li>
-            <li><span>🎂</span><span>9月生まれ</span></li>
-            <li><span>📍</span><span>千葉県生まれ、埼玉県育ち</span></li>
-            <li><span>⛳</span><span>趣味：ゴルフ・カメラ・ものづくり</span></li>
-          </ul>
+  <!-- 下部：プロフィールテキスト -->
+  <div class="dev-bio-section">
+
+    <!-- 左：プロフィール情報グリッド -->
+    <div class="reveal">
+      <div class="dev-info-grid">
+        <div class="dev-info-cell">
+          <span class="dev-info-icon">🏢</span>
+          <p class="dev-info-label">Work</p>
+          <p class="dev-info-value">会社勤務</p>
+        </div>
+        <div class="dev-info-cell">
+          <span class="dev-info-icon">🎂</span>
+          <p class="dev-info-label">Birthday</p>
+          <p class="dev-info-value">9月生まれ</p>
+        </div>
+        <div class="dev-info-cell">
+          <span class="dev-info-icon">📍</span>
+          <p class="dev-info-label">From</p>
+          <p class="dev-info-value">千葉県生まれ<br/>埼玉県育ち</p>
+        </div>
+        <div class="dev-info-cell">
+          <span class="dev-info-icon">⛳</span>
+          <p class="dev-info-label">Hobby</p>
+          <p class="dev-info-value">ゴルフ・カメラ<br/>ものづくり</p>
         </div>
       </div>
-
-      <div class="reveal delay-2">
-        <p class="section-label">Profile</p>
-        <!-- ★ 見出し・本文はここを変えてください -->
-        <h3 class="dev-bio-heading">
-          趣味から生まれた<br/><em>最初の一本。</em>
-        </h3>
-        <p class="dev-bio-text">
-          ゴルフが好きで、「こんなアプリがあればいいな」と思ったことがきっかけで開発を始めました。
-          企業で働く傍ら、週末や隙間時間に一人でコツコツと作り続けています。
-        </p>
-        <p class="dev-bio-text">
-          カメラやものづくりが好きな性格もあって、細部のデザインや使い勝手にはこだわりがあります。
-          SwiftUI を使ったiOSアプリ開発を独学で学び、AIに相談しながらゴルフアプリの開発からスタートしましたが、
-          今後はゴルフ関連アプリだけでなく、さまざまなシーンで役立つアプリをリリースしていく予定です。
-        </p>
-      </div>
-
     </div>
+
+    <!-- 右：バイオグラフィ -->
+    <div class="reveal delay-2">
+      <p class="section-label">Profile</p>
+      <h3 class="dev-bio-heading">
+        趣味から生まれた<br/><em>最初の一本。</em>
+      </h3>
+      <p class="dev-bio-text">
+        ゴルフが好きで、「こんなアプリがあればいいな」と思ったことがきっかけで開発を始めました。
+        企業で働く傍ら、週末や隙間時間に一人でコツコツと作り続けています。
+      </p>
+      <p class="dev-bio-text">
+        カメラやものづくりが好きな性格もあって、細部のデザインや使い勝手にはこだわりがあります。
+        SwiftUI を使ったiOSアプリ開発を独学で学び、AIに相談しながらゴルフアプリの開発からスタートしましたが、
+        今後はゴルフ関連アプリだけでなく、さまざまなシーンで役立つアプリをリリースしていく予定です。
+      </p>
+    </div>
+
   </div>
 </section>
 
 
-<!-- ⑤ POLICY（3項目）
-     ★ 項目を変える場合は .policy-row ブロックを編集してください -->
+<!-- ⑤ POLICY — カード形式・Oswald番号 -->
 <section class="policy-section section">
   <div class="container">
     <p class="section-label">Policy</p>
@@ -1162,36 +1217,42 @@
     <div class="section-divider"></div>
 
     <div class="policy-list reveal">
-      <div class="policy-row">
-        <span class="policy-num">01</span>
-        <p class="policy-title"><span class="policy-emoji">📱</span> シンプル &amp; 直感的</p>
+
+      <div class="policy-card">
+        <span class="policy-num-bg">01</span>
+        <span class="policy-num-badge">01</span>
+        <span class="policy-emoji">📱</span>
+        <p class="policy-title">シンプル &amp; 直感的</p>
         <p class="policy-text">マニュアルなしで使えることが目標です。初めて開いた瞬間から迷わず使えるUIを追求し、余分な機能は作りません。</p>
       </div>
-      <div class="policy-row">
-        <span class="policy-num">02</span>
-        <p class="policy-title"><span class="policy-emoji">🆓</span> 原則、無料で使えること</p>
+
+      <div class="policy-card">
+        <span class="policy-num-bg">02</span>
+        <span class="policy-num-badge">02</span>
+        <span class="policy-emoji">🆓</span>
+        <p class="policy-title">原則、無料で使えること</p>
         <p class="policy-text">広告サポートにより、基本機能は無料で提供します。ただし、一部のアプリではサブスクリプション機能を提供する場合があります。</p>
       </div>
-      <div class="policy-row">
-        <span class="policy-num">03</span>
-        <p class="policy-title"><span class="policy-emoji">♿</span> 誰でも使いやすく</p>
+
+      <div class="policy-card">
+        <span class="policy-num-bg">03</span>
+        <span class="policy-num-badge">03</span>
+        <span class="policy-emoji">♿</span>
+        <p class="policy-title">誰でも使いやすく</p>
         <p class="policy-text">大きな文字、シンプルな操作。スマートフォンに不慣れな方でも、お年寄りでも、ストレスなく使えることを意識して作っています。</p>
       </div>
+
     </div>
   </div>
 </section>
 
 
-<!-- ⑥ UPDATES（updates.json から自動生成）
-     ★★★ 更新するときは updates.json だけ編集してください ★★★
-     このHTMLは触らなくてOKです。
-     タグの種類: "new" / "update" / "coming" -->
+<!-- ⑥ UPDATES -->
 <section class="updates-section section">
   <div class="container">
     <p class="section-label">Updates</p>
     <h2 class="section-heading">最新情報</h2>
     <div class="section-divider"></div>
-    <!-- JSONから動的に挿入されます -->
     <div class="updates-list" id="updates-list"></div>
   </div>
 </section>
@@ -1205,7 +1266,6 @@
       <h2 class="contact-heading">
         お気軽に<br/><em>ご連絡ください。</em>
       </h2>
-      <!-- ★ 文章はここを変えてください -->
       <p class="contact-text">
         「こんな機能がほしい」「ここが使いにくい」<br/>
         バグの報告から機能リクエスト、ご感想まで<br/>
@@ -1224,20 +1284,15 @@
 </section>
 
 
-<!-- ⑧ FOOTER
-     ★ アプリが増えたら .footer-app-link と footer-nav-list を追加してください -->
+<!-- ⑧ FOOTER -->
 <footer class="site-footer">
-
   <div class="footer-main">
-
-    <!-- ブランド＋アプリバッジ -->
     <div class="footer-brand-col">
       <a href="#top" class="footer-logo">⛳ Satopi Apps</a>
       <p class="footer-tagline">
         日常をちょっと便利にする<br/>
         iOSアプリを作っています。
       </p>
-      <!-- アプリへの直リンクバッジ（★ アプリが増えたら追加） -->
       <div class="footer-app-links">
         <a href="apps/weather-golf/" class="footer-app-link">
           <span class="footer-app-link-icon">🌤️</span>
@@ -1257,36 +1312,22 @@
         </a>
       </div>
     </div>
-
-    <!-- App Store リンク -->
     <div class="footer-nav-col">
       <p class="footer-nav-heading">App Store</p>
       <ul class="footer-nav-list">
-        <li>
-          <a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964"
-             target="_blank" rel="noopener">Weather Golf</a>
-        </li>
-        <li>
-          <a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356"
-             target="_blank" rel="noopener">ゴルフ課題メモ</a>
-        </li>
+        <li><a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964" target="_blank" rel="noopener">Weather Golf</a></li>
+        <li><a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356" target="_blank" rel="noopener">ゴルフ課題メモ</a></li>
       </ul>
     </div>
-
-    <!-- サイトリンク -->
     <div class="footer-nav-col">
       <p class="footer-nav-heading">Site</p>
       <ul class="footer-nav-list">
         <li><a href="#apps">アプリ一覧</a></li>
         <li><a href="#developer">開発者について</a></li>
         <li><a href="#contact">お問い合わせ</a></li>
-        <li>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog"
-             target="_blank" rel="noopener">お問い合わせフォーム</a>
-        </li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" target="_blank" rel="noopener">お問い合わせフォーム</a></li>
       </ul>
     </div>
-
   </div>
 
   <div class="footer-divider"><hr /></div>
@@ -1295,24 +1336,19 @@
     <p class="footer-copy">© <span id="footer-year"></span> Satoshi Ohara. All rights reserved.</p>
     <p class="footer-made">Made with <span>♥</span> for everyone in Japan</p>
   </div>
-
 </footer>
 
 <script src="assets/js/common.js"></script>
 
-<!-- Updates: updates.json から動的に読み込む
-     ★ 更新するときは updates.json だけ編集してください -->
 <script>
 (function() {
   var tagLabels = { new: 'New', update: 'Update', coming: 'Coming' };
   var tagClasses = { new: 'tag-new', update: 'tag-update', coming: 'tag-coming' };
-
   fetch('updates.json')
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var list = document.getElementById('updates-list');
       if (!list || !data.length) return;
-
       data.forEach(function(item, i) {
         var div = document.createElement('div');
         div.className = 'update-item';
@@ -1325,14 +1361,10 @@
             '<span class="update-text">' + item.text + '</span>' +
           '</div>';
         list.appendChild(div);
-
-        // 少し遅らせてフェードイン
         setTimeout(function() { div.classList.add('loaded'); }, 80 * i);
       });
     })
-    .catch(function() {
-      /* updates.json が見つからない場合は何も表示しない */
-    });
+    .catch(function() { /* updates.json が見つからない場合は何も表示しない */ });
 })();
 </script>
 
