@@ -30,27 +30,39 @@
             line-height: 1.8;
         }
 
-        /* ヘッダーセクション（WeatherGolfスタイル） */
+        /* ページ全体のヘッダー */
         .page-header {
             background-color: var(--primary-navy);
             color: #ffffff;
-            padding: 60px 20px;
-            text-align: center;
+            padding: 40px 20px 80px; /* 下に食い込ませるため下部paddingを多めに */
             border-bottom: 5px solid var(--accent-gold);
+            position: relative;
         }
 
+        /* 戻りリンクを左上に配置 */
         .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
             color: var(--gold-light);
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .back-link:hover {
             opacity: 0.8;
+        }
+
+        /* ロゴとタイトルを中央に配置 */
+        .header-content {
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto;
         }
 
         .app-meta {
@@ -61,28 +73,57 @@
             margin-bottom: 10px;
         }
 
+        /* ロゴをFigmaのデザインに合わせる（星マーク） */
         .app-icon {
             width: 40px;
             height: 40px;
-            background: #ffffff;
+            background: var(--primary-navy); /* ネイビー背景 */
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: var(--primary-navy); /* アイコンの色を戻しました */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 2px solid var(--gold-light); /* 境界線を金に */
+        }
+
+        /* 金色の星（キラキラ）をCSSで再現 */
+        .sparkle {
+            color: #ffca28; /* 金色 */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+        }
+
+        /* 星の配置（Figmaの画像に合わせて3つ） */
+        .sparkle-top {
+            font-size: 16px;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sparkle-bottom-left {
+            font-size: 12px;
+            bottom: 5px;
+            left: 8px;
+        }
+
+        .sparkle-bottom-right {
+            font-size: 12px;
+            bottom: 5px;
+            right: 8px;
         }
 
         .app-name {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             letter-spacing: 0.05em;
             color: var(--gold-light);
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
             margin: 10px 0;
             letter-spacing: 0.02em;
@@ -98,7 +139,7 @@
         /* コンテンツエリア */
         .container {
             max-width: 850px;
-            margin: -40px auto 0; /* ヘッダーに少し食い込ませるスタイル */
+            margin: -40px auto 0;
             padding: 0 20px 80px;
         }
 
@@ -160,7 +201,7 @@
         }
 
         li::before {
-            content: "\f00c"; /* チェックマークでポップに */
+            content: "\f00c"; /* チェックマーク */
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -209,10 +250,12 @@
             font-size: 0.85rem;
         }
 
+        /* レスポンシブ対応 */
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .card { padding: 30px 20px; }
-            .page-header { padding: 40px 20px; }
+            .page-header { padding: 50px 20px 60px; }
+            .back-link { top: 10px; left: 10px; }
         }
     </style>
 </head>
@@ -220,17 +263,22 @@
 
     <header class="page-header">
         <a href="../index.html" class="back-link"><i class="fa-solid fa-chevron-left"></i> Satopi Apps TOP</a>
-        <div class="app-meta">
-            <div class="app-icon"><i class="fa-solid fa-heart"></i></div>
-            <span class="app-name">推しメモ — Oshi Memo</span>
+        <div class="header-content">
+            <div class="app-meta">
+                <div class="app-icon">
+                    <span class="sparkle sparkle-top">&#f005;</span> <span class="sparkle sparkle-bottom-left">&#f005;</span>
+                    <span class="sparkle sparkle-bottom-right">&#f005;</span>
+                </div>
+                <span class="app-name">推しメモ — Oshi Memo</span>
+            </div>
+            <h1>プライバシーポリシー</h1>
+            <p class="last-update">最終更新日：2026年4月1日</p>
         </div>
-        <h1>プライバシーポリシー</h1>
-        <p class="last-update">最終更新日：2026年4月1日</p>
     </header>
 
     <div class="container">
         <main class="card">
-            <p style="margin-bottom: 40px;">
+            <p style="margin-bottom: 40px; font-size: 1.05rem; font-weight: 500;">
                 推しメモ（以下「本アプリ」といいます）は、ユーザーの皆様が安心して「推し活」を記録できるよう、プライバシーの保護に努めます。本ポリシーは、本アプリにおける情報の取り扱いを説明するものです。
             </p>
 
@@ -242,7 +290,7 @@
                 
                 <h3>ユーザー入力情報</h3>
                 <ul>
-                    <li>推しのプロフィール（名前、誕生日、記念日、画像等）</li>
+                    <li>推しのプロフィール（名前、誕生日、記念日等）</li>
                     <li>推しに関する活動メモ、リンク情報</li>
                     <li>お気に入りおよびカテゴリ管理データ</li>
                 </ul>
