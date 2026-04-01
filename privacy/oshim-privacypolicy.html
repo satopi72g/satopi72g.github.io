@@ -34,14 +34,18 @@
         .page-header {
             background-color: var(--primary-navy);
             color: #ffffff;
-            padding: 60px 20px;
+            padding: 80px 20px 60px; /* 上部に隙間を作るため少し増やしました */
             text-align: center;
             border-bottom: 5px solid var(--accent-gold);
+            position: relative; /* ★追加：左上リンクを配置する基準点になります */
         }
 
+        /* 戻りリンクを左上に固定する設定 */
         .back-link {
+            position: absolute; /* ★追加：親要素（header）を基準に自由に配置します */
+            top: 20px;          /* 上から20px */
+            left: 20px;         /* 左から20px */
             display: inline-block;
-            margin-bottom: 20px;
             color: var(--gold-light);
             text-decoration: none;
             font-size: 0.9rem;
@@ -220,8 +224,8 @@
 
     <header class="page-header">
         <a href="../index.html" class="back-link"><i class="fa-solid fa-chevron-left"></i> Satopi Apps TOP</a>
+        
         <div class="app-meta">
-            <div class="app-icon"><i class="fa-solid fa-heart"></i></div>
             <span class="app-name">推しメモ — Oshi Memo</span>
         </div>
         <h1>プライバシーポリシー</h1>
