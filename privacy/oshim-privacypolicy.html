@@ -7,12 +7,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-color: #ff0080;
-            --bg-color: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            /* 配色：ホワイトベース、ネイビー、ゴールド */
+            --primary-navy: #1e293b;
+            --accent-gold: #b59410;
+            --gold-light: #f1e7b0;
+            --bg-white: #ffffff;
+            --bg-soft: #f8fafc;
+            --text-main: #334155;
+            --text-sub: #64748b;
+            --card-border: #e2e8f0;
         }
 
         * {
@@ -23,146 +26,186 @@
 
         body {
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-soft);
             color: var(--text-main);
             line-height: 1.8;
-            overflow-x: hidden;
         }
 
-        /* 背景装飾 */
-        .bg-glow {
+        /* 明るい背景装飾 */
+        .bg-pattern {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.15), transparent),
-                        radial-gradient(circle at 80% 70%, rgba(255, 0, 128, 0.1), transparent);
+            background-color: var(--bg-soft);
+            background-image: radial-gradient(var(--gold-light) 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            opacity: 0.3;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-grad);
-            border-radius: 20px;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #334155 100%);
+            border-radius: 22px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.5);
+            font-size: 45px;
+            color: var(--accent-gold);
+            box-shadow: 0 10px 25px rgba(30, 41, 59, 0.15);
+            border: 2px solid var(--accent-gold);
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--text-sub));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            color: var(--primary-navy);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
 
         .last-update {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 0.1em;
         }
 
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 30px;
+            background: var(--bg-white);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
         }
 
         section {
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .section-num {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-weight: 900;
+            margin-right: 15px;
+            font-family: 'Georgia', serif;
+            font-style: italic;
         }
 
         h2 {
             font-size: 1.4rem;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 20px;
+            color: var(--primary-navy);
+            font-weight: 700;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            color: var(--primary-navy);
+            margin: 25px 0 12px;
             display: flex;
             align-items: center;
         }
 
-        h3 {
-            font-size: 1.1rem;
-            color: #fff;
-            margin: 25px 0 10px;
+        h3::before {
+            content: "\f054";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            color: var(--accent-gold);
         }
 
         p, li {
-            font-size: 1rem;
-            color: var(--text-sub);
+            font-size: 0.95rem;
+            color: var(--text-main);
         }
 
         ul {
             list-style: none;
-            margin-left: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            position: relative;
+            margin-bottom: 8px;
         }
 
         li::before {
-            content: "•";
-            color: var(--accent-color);
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
+            content: "";
+            position: absolute;
+            left: -15px;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-gold);
+            border-radius: 50%;
         }
 
         .external-link {
-            color: #667eea;
-            text-decoration: none;
-            transition: 0.3s;
-            word-break: break-all;
+            color: var(--primary-navy);
+            text-decoration: underline;
+            text-decoration-color: var(--accent-gold);
+            font-weight: 600;
+            transition: 0.2s;
         }
 
         .external-link:hover {
-            color: var(--accent-color);
-            text-decoration: underline;
+            background-color: var(--gold-light);
+            text-decoration: none;
         }
 
         .btn-contact {
             display: inline-block;
-            background: var(--primary-grad);
-            color: white;
-            padding: 15px 40px;
+            background-color: var(--primary-navy);
+            color: #fff;
+            padding: 16px 45px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1rem;
             margin-top: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
+            border: 2px solid var(--primary-navy);
         }
 
         .btn-contact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.4);
+            background-color: transparent;
+            color: var(--primary-navy);
+            transform: translateY(-2px);
         }
 
         footer {
@@ -170,12 +213,32 @@
             margin-top: 60px;
             padding-bottom: 40px;
             color: var(--text-sub);
-            font-size: 0.8rem;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* 個人ページへのリンク用 */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-navy);
         }
 
         @media (max-width: 600px) {
             .card {
-                padding: 25px;
+                padding: 30px 20px;
+                border-radius: 20px;
             }
             h1 {
                 font-size: 1.8rem;
@@ -184,9 +247,11 @@
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
+    <div class="bg-pattern"></div>
 
     <div class="container">
+        <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Satopi Apps TOP</a>
+
         <header>
             <div class="app-icon">
                 <i class="fa-solid fa-heart"></i>
@@ -196,17 +261,19 @@
         </header>
 
         <main class="card">
-            <p style="margin-bottom: 30px;">
+            <p style="margin-bottom: 30px; font-weight: 500;">
                 推しメモ（以下「本アプリ」といいます）は、ユーザーの皆様が安心して「推し活」を楽しめるよう、プライバシーの保護に最大限努めます。本ポリシーは、本アプリにおける情報の取り扱いについて説明するものです。
             </p>
 
             <section>
-                <span class="section-num">01</span>
-                <h2>収集する情報</h2>
+                <div class="section-header">
+                    <span class="section-num">01</span>
+                    <h2>収集する情報</h2>
+                </div>
                 
                 <h3>ユーザーが入力する情報</h3>
                 <ul>
-                    <li>推しの情報（名前、誕生日、記念日、関連リンク、画像等）</li>
+                    <li>推しの情報（名前、誕生日、記念日、関連リンク等）</li>
                     <li>推しに関するメモ・活動記録（テキスト情報）</li>
                     <li>お気に入り登録やカテゴリ分け等の管理情報</li>
                 </ul>
@@ -220,67 +287,79 @@
             </section>
 
             <section>
-                <span class="section-num">02</span>
-                <h2>情報の利用目的</h2>
+                <div class="section-header">
+                    <span class="section-num">02</span>
+                    <h2>情報の利用目的</h2>
+                </div>
                 <ul>
                     <li>本アプリの基幹機能（メモ作成・管理・通知等）の提供</li>
                     <li>ユーザー体験のカスタマイズおよび利便性の向上</li>
                     <li>新機能の開発、不具合修正、統計データの分析</li>
-                    <li>広告の配信（非パーソナライズ）およびその効果測定</li>
+                    <li>広告の配信およびその効果測定</li>
                     <li>お問い合わせへの対応</li>
                 </ul>
             </section>
 
             <section>
-                <span class="section-num">03</span>
-                <h2>第三者への提供</h2>
-                <p>本アプリは、利便性向上と継続的な運営のため、以下のサービスを利用しています。</p>
-            
+                <div class="section-header">
+                    <span class="section-num">03</span>
+                    <h2>第三者への提供</h2>
+                </div>
+                <p>本アプリは、継続的な運営のため、以下のサービスを利用しています。</p>
+
                 <h3>Google AdMob</h3>
                 <ul>
                     <li>目的：広告配信および効果測定</li>
                     <li>提供情報：端末識別子（IDFA等）、IPアドレス、利用ログ</li>
                     <li>詳細：<a href="https://policies.google.com/privacy" class="external-link" target="_blank">Google プライバシーポリシー</a></li>
                 </ul>
-                <p style="font-size: 0.9rem; margin-top: 10px; color: var(--text-sub);">
+                <p style="font-size: 0.85rem; margin-top: 15px; background: var(--bg-soft); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent-gold);">
                     ※AppleのATT（App Tracking Transparency）ガイドラインに基づき、ユーザーの許諾を得た範囲内で広告識別子を利用する場合があります。許可いただけない場合でも、個人を特定しない形での広告（非パーソナライズ広告）が表示されます。
                 </p>
             </section>
 
             <section>
-                <span class="section-num">04</span>
-                <h2>情報の保存と管理</h2>
+                <div class="section-header">
+                    <span class="section-num">04</span>
+                    <h2>情報の保存と管理</h2>
+                </div>
                 <ul>
                     <li>ユーザーが入力した推しのデータは、原則として<strong>ユーザーの端末内にのみ保存</strong>されます。</li>
-                    <li>本アプリはアカウント登録機能を備えていないため、弊社サーバー上で個人を特定できる情報を保持することはありません。</li>
-                    <li>アプリを削除（アンインストール）すると、端末内のデータも全て削除されます。</li>
+                    <li>本アプリはアカウント登録機能を持たないため、サーバー上で個人情報を保持することはありません。</li>
+                    <li>アプリを削除すると、端末内のデータも全て削除されます。</li>
                 </ul>
             </section>
 
             <section>
-                <span class="section-num">05</span>
-                <h2>セキュリティ</h2>
+                <div class="section-header">
+                    <span class="section-num">05</span>
+                    <h2>セキュリティ</h2>
+                </div>
                 <p>本アプリは、不正アクセスや情報の漏洩を防止するため、OSの提供する安全なデータ保存領域を使用し、外部通信にはHTTPSによる暗号化を用いるなど、適切な安全対策を講じています。</p>
             </section>
 
             <section>
-                <span class="section-num">06</span>
-                <h2>お問い合わせ</h2>
-                <p>プライバシーポリシーに関するご質問や、情報の取り扱いに関するお問い合わせは、以下のフォームよりお願いいたします。</p>
+                <div class="section-header">
+                    <span class="section-num">06</span>
+                    <h2>お問い合わせ</h2>
+                </div>
+                <p>本ポリシーに関するお問い合わせは、以下のフォームよりお願いいたします。</p>
                 <div style="text-align: center;">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" class="btn-contact">お問い合わせフォーム</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" class="btn-contact">お問い合わせフォームへ</a>
                 </div>
             </section>
 
             <section>
-                <span class="section-num">07</span>
-                <h2>適用法令・変更</h2>
-                <p>本ポリシーは日本法を準拠法とします。法令の改正やサービス内容の変更に伴い、本ポリシーを予告なく改定することがあります。重要な変更はアプリ内にて通知いたします。</p>
+                <div class="section-header">
+                    <span class="section-num">07</span>
+                    <h2>適用法令・変更</h2>
+                </div>
+                <p>本ポリシーは日本法を準拠法とします。法令の改正やサービス内容の変更に伴い、本ポリシーを予告なく改定することがあります。</p>
             </section>
         </main>
 
         <footer>
-            <p>&copy; 2026 Satoshi Ohara. All rights reserved.</p>
+            <p class="copyright">&copy; 2026 Satoshi Ohara. All rights reserved.</p>
         </footer>
     </div>
 </body>
