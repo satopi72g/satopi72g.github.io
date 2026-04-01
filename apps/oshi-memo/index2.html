@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="推しメモ — 推しイベントのスクショを貼るだけで予定を自動登録。推し活専用の記録・管理アプリ。ログイン不要、完全無料。" />
+  <title>推しメモ — あなたの推し活を、もれなく刻む。</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Oswald:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== RESET & ROOT ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:       #C85FA8;
+      --accent-light: #E891CC;
+      --accent-dark:  #8B3C75;
+      --bg:           #0D0A12;
+      --bg2:          #140F1C;
+      --bg3:          #1C1527;
+      --surface:      rgba(255,255,255,0.05);
+      --border:       rgba(200,95,168,0.25);
+      --text-hi:      #F5EEF8;
+      --text-mid:     #C8B8D4;
+      --text-lo:      #7A6888;
+      --radius:       16px;
+      --shadow:       0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-hi);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(13, 10, 18, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-logo {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-hi);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-logo .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .header-nav a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover { color: var(--accent-light); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 背景グラデーション＋装飾円 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 30%, rgba(200,95,168,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 70%, rgba(139,60,117,0.12) 0%, transparent 60%);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent-light);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent-light) 0%, #F7C5E8 50%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle-ja {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--text-mid);
+      margin-bottom: 48px;
+      font-weight: 300;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-copy {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-mid);
+      max-width: 560px;
+      margin: 0 auto 56px;
+      line-height: 2;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-copy strong {
+      color: var(--accent-light);
+      font-weight: 500;
+    }
+
+    .hero-cta {
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    /* App Store badge */
+    .appstore-btn {
+      display: inline-block;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .appstore-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .appstore-btn img {
+      height: 52px;
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--text-lo);
+    }
+
+    /* ===== SCROLL HINT ===== */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-lo);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fadeUp 1s 1s ease both;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 2s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51%  { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ===== OCR HIGHLIGHT セクション ===== */
+    .ocr-section {
+      padding: 100px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ocr-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--bg), var(--bg2), var(--bg));
+    }
+
+    .ocr-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .ocr-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      background: rgba(200,95,168,0.15);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      color: var(--accent-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .ocr-heading {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+
+    .ocr-heading em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .ocr-body {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      line-height: 2;
+    }
+
+    .ocr-steps {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ocr-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .step-text {
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      padding-top: 5px;
+    }
+
+    .step-text strong { color: var(--text-hi); font-weight: 500; }
+
+    /* mock phone */
+    .ocr-mock {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-frame {
+      width: 200px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      padding: 20px 16px;
+      box-shadow: var(--shadow), 0 0 60px rgba(200,95,168,0.12);
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 60px; height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
+      margin: 0 auto 20px;
+    }
+
+    .phone-screenshot {
+      background: linear-gradient(135deg, #1e1630, #2d1f40);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .screenshot-img-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, rgba(200,95,168,0.2), rgba(139,60,117,0.1));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .screenshot-ocr-line {
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 5px;
+    }
+
+    .ocr-line-1 { background: rgba(200,95,168,0.6); width: 90%; }
+    .ocr-line-2 { background: rgba(200,95,168,0.35); width: 60%; }
+    .ocr-line-3 { background: rgba(200,95,168,0.2); width: 75%; }
+
+    .phone-detected {
+      background: rgba(200,95,168,0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.62rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .detected-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 100px 24px;
+      background: var(--bg2);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .features-grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(200,95,168,0.25), rgba(139,60,117,0.1));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-hi);
+    }
+
+    .feature-body {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+
+    /* ===== FOR WHO ===== */
+    .forwho {
+      padding: 100px 24px;
+      text-align: center;
+    }
+
+    .forwho-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .forwho-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .forwho-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(200,95,168,0.12);
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .forwho-item:first-child { border-top: 1px solid rgba(200,95,168,0.12); }
+    .forwho-item:hover { background: rgba(200,95,168,0.05); }
+
+    .forwho-check {
+      color: var(--accent-light);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .forwho-text {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+    }
+
+    /* ===== PRIVACY ASSURANCE ===== */
+    .privacy-strip {
+      padding: 80px 24px;
+      background: var(--bg2);
+    }
+
+    .privacy-strip-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .privacy-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .privacy-item .icon {
+      font-size: 2rem;
+    }
+
+    .privacy-item h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-hi);
+    }
+
+    .privacy-item p {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+
+    /* ===== CTA BOTTOM ===== */
+    .cta-bottom {
+      padding: 120px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bottom::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,95,168,0.14) 0%, transparent 70%);
+    }
+
+    .cta-bottom-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .cta-bottom-sub {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .cta-bottom .appstore-btn {
+      position: relative;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-size: 0.82rem;
+      color: var(--text-lo);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-lo);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent-light); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header { padding: 16px 20px; }
+      .header-nav { gap: 18px; }
+
+      .ocr-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .ocr-mock { order: -1; }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-strip-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.8rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <a href="#" class="header-logo">
+    <div class="logo-icon">💜</div>
+    推しメモ
+  </a>
+  <nav class="header-nav">
+    <a href="#features">機能</a>
+    <a href="#forwho">こんな方に</a>
+    <a href="https://satopi72g.github.io/privacy/oshim-privacypolicy.html">プライバシー</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog">お問い合わせ</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">★ 推し活専用アプリ</div>
+    <h1 class="hero-title"><span>推しメモ</span></h1>
+    <p class="hero-subtitle-ja">あなたの推し活を、もれなく刻む。</p>
+    <p class="hero-copy">
+      スクショを貼るだけで、イベント情報を<strong>自動認識</strong>。<br />
+      推しごとの予定・記念日・参戦ログを、<br />
+      あなただけの専用スペースにまとめて保存。
+    </p>
+    <div class="hero-cta">
+      <!-- ★ App Store URL を差し替えてください -->
+      <a class="appstore-btn" href="https://apps.apple.com/jp/app/id__YOUR_APP_ID__" target="_blank" rel="noopener">
+        <img
+          src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-jp"
+          alt="Download on the App Store"
+        />
+      </a>
+      <p class="hero-note">iOS 16.0以上対応 &nbsp;|&nbsp; 無料ダウンロード &nbsp;|&nbsp; ログイン不要</p>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    scroll
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== OCR ハイライト ===== -->
+<section class="ocr-section">
+  <div class="ocr-inner">
+    <!-- 左：説明 -->
+    <div>
+      <div class="ocr-label">✦ Key Feature</div>
+      <h2 class="ocr-heading">
+        スクショを貼るだけ。<br />
+        <em>自動でイベントを読み取る。</em>
+      </h2>
+      <p class="ocr-body">
+        SNSやオフィシャルサイトで見つけたイベント告知のスクショを貼り付けるだけ。
+        Apple の OCR 技術を使って、タイトル・日程・場所を自動で読み取り、メモに登録します。
+      </p>
+      <div class="ocr-steps">
+        <div class="ocr-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>スクショを選ぶ</strong><br />カメラロールから告知画像を選択するだけ</div>
+        </div>
+        <div class="ocr-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>OCRが自動解析</strong><br />テキストを検出して候補を提示</div>
+        </div>
+        <div class="ocr-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>ワンタップで保存</strong><br />確認して登録。面倒な入力はほぼゼロ</div>
+        </div>
+      </div>
+    </div>
+    <!-- 右：モック -->
+    <div class="ocr-mock">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screenshot">
+          <div class="screenshot-img-placeholder">📸</div>
+          <div class="screenshot-ocr-line ocr-line-1"></div>
+          <div class="screenshot-ocr-line ocr-line-2"></div>
+          <div class="screenshot-ocr-line ocr-line-3"></div>
+        </div>
+        <div class="phone-detected">
+          <span class="detected-badge">OCR 検出</span><br />
+          🗓 2026年5月3日<br />
+          📍 東京国際フォーラム<br />
+          ✅ メモに追加する →
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features" id="features">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Features</p>
+    <h2 class="section-title">推し活に、ちょうどいい機能。</h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">🌈</div>
+      <h3 class="feature-title">推し別カラー管理</h3>
+      <p class="feature-body">推しごとにイメージカラーを設定。複数の推しがいても、カラーとタブで直感的に切り替え可能。</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📅</div>
+      <h3 class="feature-title">スケジュール＆リスト</h3>
+      <p class="feature-body">ライブ当選発表・グッズ発売日・配信時間をカレンダーとリストで一括管理。重複もひと目でわかる。</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">⏳</div>
+      <h3 class="feature-title">カウントダウン／アップ</h3>
+      <p class="feature-body">「次のライブまであと何日？」「推しと出会って何日？」大切な日をカウント。節目を絶対に逃さない。</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🖼</div>
+      <h3 class="feature-title">画像付き参戦ログ</h3>
+      <p class="feature-body">現場の写真・グッズ画像をメモに添付して保存。後から読み返せば、あの日の熱量がよみがえる。</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🏷</div>
+      <h3 class="feature-title">タグ＆お気に入り</h3>
+      <p class="feature-body">「チケット」「メディア出演」「聖地巡礼」など自由なタグで整理。重要な情報はお気に入り登録でいつでもすぐ確認。</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🔒</div>
+      <h3 class="feature-title">完全プライベート保存</h3>
+      <p class="feature-body">データはすべて端末内に保存。ログイン不要・外部送信なし。あなたの推し活記録は、あなただけのもの。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOR WHO ===== -->
+<section class="forwho" id="forwho">
+  <div class="forwho-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">For You</p>
+      <h2 class="section-title">こんな推し活をしている方に。</h2>
+    </div>
+    <div class="forwho-list">
+      <div class="forwho-item reveal">
+        <span class="forwho-check">♡</span>
+        <span class="forwho-text">複数の推しを掛け持ちしていて、スケジュール管理がカオスになっている</span>
+      </div>
+      <div class="forwho-item reveal">
+        <span class="forwho-check">♡</span>
+        <span class="forwho-text">イベント告知をSNSのブックマークに溜め込んで、見逃すことがある</span>
+      </div>
+      <div class="forwho-item reveal">
+        <span class="forwho-check">♡</span>
+        <span class="forwho-text">参戦記録を写真フォルダとメモアプリに分散させて管理しきれていない</span>
+      </div>
+      <div class="forwho-item reveal">
+        <span class="forwho-check">♡</span>
+        <span class="forwho-text">推しの記念日（デビュー日・誕生日）を忘れたくない</span>
+      </div>
+      <div class="forwho-item reveal">
+        <span class="forwho-check">♡</span>
+        <span class="forwho-text">VTuber・アニメ・アイドル・声優など、ジャンルをまたいで推し活している</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRIVACY STRIP ===== -->
+<section class="privacy-strip">
+  <div class="privacy-strip-inner">
+    <div class="privacy-item reveal">
+      <div class="icon">📵</div>
+      <h3>ログイン不要</h3>
+      <p>アカウント登録や個人情報の入力は一切なし。ダウンロードしたその場から使い始められます。</p>
+    </div>
+    <div class="privacy-item reveal">
+      <div class="icon">📦</div>
+      <h3>端末内にのみ保存</h3>
+      <p>入力したデータは外部サーバーに送信されません。あなたの大切な推し活ログは、端末の中だけに。</p>
+    </div>
+    <div class="privacy-item reveal">
+      <div class="icon">🆓</div>
+      <h3>基本機能は無料</h3>
+      <p>推し登録・スケジュール管理・参戦ログなど、主要機能はすべて無料でご利用いただけます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BOTTOM ===== -->
+<section class="cta-bottom">
+  <h2 class="cta-bottom-title reveal">今日から、推し活をもれなく。</h2>
+  <p class="cta-bottom-sub reveal">ダウンロード無料・ログイン不要 — すぐに始められます。</p>
+  <div class="reveal">
+    <!-- ★ App Store URL を差し替えてください -->
+    <a class="appstore-btn" href="https://apps.apple.com/jp/app/id__YOUR_APP_ID__" target="_blank" rel="noopener">
+      <img
+        src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-jp"
+        alt="Download on the App Store"
+      />
+    </a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-brand">© 2026 Satoshi Ohara (Satopi Apps). All rights reserved.</div>
+  <div class="footer-links">
+    <a href="https://satopi72g.github.io/index.html">Satopi Apps TOP</a>
+    <a href="https://satopi72g.github.io/privacy/oshim-privacypolicy.html">プライバシーポリシー</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog">お問い合わせ</a>
+  </div>
+</footer>
+
+<!-- ===== SCROLL REVEAL ===== -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
