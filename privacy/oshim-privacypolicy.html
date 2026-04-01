@@ -7,12 +7,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            /* 配色：ホワイトベース、ネイビー、ゴールド */
             --primary-navy: #1e293b;
             --accent-gold: #b59410;
             --gold-light: #f1e7b0;
             --bg-white: #ffffff;
-            --bg-soft: #f8fafc;
+            --bg-soft: #f1f5f9;
             --text-main: #334155;
             --text-sub: #64748b;
             --card-border: #e2e8f0;
@@ -31,126 +30,122 @@
             line-height: 1.8;
         }
 
-        /* 明るい背景装飾 */
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-color: var(--bg-soft);
-            background-image: radial-gradient(var(--gold-light) 0.5px, transparent 0.5px);
-            background-size: 20px 20px;
-            opacity: 0.3;
-        }
-
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-
-        header {
+        /* ヘッダーセクション（WeatherGolfスタイル） */
+        .page-header {
+            background-color: var(--primary-navy);
+            color: #ffffff;
+            padding: 60px 20px;
             text-align: center;
-            margin-bottom: 50px;
+            border-bottom: 5px solid var(--accent-gold);
         }
 
-        .app-icon {
-            width: 90px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--primary-navy) 0%, #334155 100%);
-            border-radius: 22px;
-            margin: 0 auto 20px;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        .app-meta {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 45px;
-            color: var(--accent-gold);
-            box-shadow: 0 10px 25px rgba(30, 41, 59, 0.15);
-            border: 2px solid var(--accent-gold);
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary-navy); /* アイコンの色を戻しました */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .app-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--gold-light);
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            color: var(--primary-navy);
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
+            margin: 10px 0;
+            letter-spacing: 0.02em;
         }
 
         .last-update {
             font-size: 0.85rem;
-            color: var(--accent-gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* コンテンツエリア */
+        .container {
+            max-width: 850px;
+            margin: -40px auto 0; /* ヘッダーに少し食い込ませるスタイル */
+            padding: 0 20px 80px;
         }
 
         .card {
             background: var(--bg-white);
             border: 1px solid var(--card-border);
-            border-radius: 30px;
+            border-radius: 20px;
             padding: 50px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
 
         section {
-            margin-bottom: 45px;
+            margin-bottom: 50px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--bg-soft);
+            padding-bottom: 10px;
         }
 
         .section-num {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: var(--accent-gold);
             font-weight: 900;
             margin-right: 15px;
             font-family: 'Georgia', serif;
-            font-style: italic;
         }
 
         h2 {
             font-size: 1.4rem;
             color: var(--primary-navy);
             font-weight: 700;
-            position: relative;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 30px;
-            height: 3px;
-            background: var(--accent-gold);
-            border-radius: 2px;
         }
 
         h3 {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             color: var(--primary-navy);
             margin: 25px 0 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        h3::before {
-            content: "\f054";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            font-size: 0.8rem;
-            margin-right: 10px;
-            color: var(--accent-gold);
+            padding-left: 10px;
+            border-left: 4px solid var(--accent-gold);
         }
 
         p, li {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-main);
         }
 
@@ -161,108 +156,82 @@
 
         li {
             position: relative;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         li::before {
-            content: "";
+            content: "\f00c"; /* チェックマークでポップに */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
             position: absolute;
-            left: -15px;
-            top: 10px;
-            width: 6px;
-            height: 6px;
-            background: var(--accent-gold);
-            border-radius: 50%;
+            left: -25px;
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+        }
+
+        .info-box {
+            font-size: 0.9rem;
+            margin-top: 20px;
+            background: var(--bg-soft);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-navy);
         }
 
         .external-link {
             color: var(--primary-navy);
+            font-weight: 700;
             text-decoration: underline;
             text-decoration-color: var(--accent-gold);
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .external-link:hover {
-            background-color: var(--gold-light);
-            text-decoration: none;
         }
 
         .btn-contact {
             display: inline-block;
             background-color: var(--primary-navy);
             color: #fff;
-            padding: 16px 45px;
-            border-radius: 50px;
+            padding: 16px 50px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1rem;
             margin-top: 20px;
             transition: all 0.3s;
-            border: 2px solid var(--primary-navy);
         }
 
         .btn-contact:hover {
-            background-color: transparent;
-            color: var(--primary-navy);
+            background-color: var(--accent-gold);
             transform: translateY(-2px);
         }
 
         footer {
             text-align: center;
-            margin-top: 60px;
-            padding-bottom: 40px;
+            padding: 40px 0;
             color: var(--text-sub);
-        }
-
-        .copyright {
             font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        /* 個人ページへのリンク用 */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: var(--text-sub);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .back-link:hover {
-            color: var(--primary-navy);
         }
 
         @media (max-width: 600px) {
-            .card {
-                padding: 30px 20px;
-                border-radius: 20px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
+            h1 { font-size: 1.8rem; }
+            .card { padding: 30px 20px; }
+            .page-header { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-pattern"></div>
+
+    <header class="page-header">
+        <a href="../index.html" class="back-link"><i class="fa-solid fa-chevron-left"></i> Satopi Apps TOP</a>
+        <div class="app-meta">
+            <div class="app-icon"><i class="fa-solid fa-heart"></i></div>
+            <span class="app-name">推しメモ — Oshi Memo</span>
+        </div>
+        <h1>プライバシーポリシー</h1>
+        <p class="last-update">最終更新日：2026年4月1日</p>
+    </header>
 
     <div class="container">
-        <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Satopi Apps TOP</a>
-
-        <header>
-            <div class="app-icon">
-                <i class="fa-solid fa-heart"></i>
-            </div>
-            <h1>推しメモ</h1>
-            <p class="last-update">最終更新日：2026年4月1日</p>
-        </header>
-
         <main class="card">
-            <p style="margin-bottom: 30px; font-weight: 500;">
-                推しメモ（以下「本アプリ」といいます）は、ユーザーの皆様が安心して「推し活」を楽しめるよう、プライバシーの保護に最大限努めます。本ポリシーは、本アプリにおける情報の取り扱いについて説明するものです。
+            <p style="margin-bottom: 40px;">
+                推しメモ（以下「本アプリ」といいます）は、ユーザーの皆様が安心して「推し活」を記録できるよう、プライバシーの保護に努めます。本ポリシーは、本アプリにおける情報の取り扱いを説明するものです。
             </p>
 
             <section>
@@ -271,17 +240,17 @@
                     <h2>収集する情報</h2>
                 </div>
                 
-                <h3>ユーザーが入力する情報</h3>
+                <h3>ユーザー入力情報</h3>
                 <ul>
-                    <li>推しの情報（名前、誕生日、記念日、関連リンク等）</li>
-                    <li>推しに関するメモ・活動記録（テキスト情報）</li>
-                    <li>お気に入り登録やカテゴリ分け等の管理情報</li>
+                    <li>推しのプロフィール（名前、誕生日、記念日、画像等）</li>
+                    <li>推しに関する活動メモ、リンク情報</li>
+                    <li>お気に入りおよびカテゴリ管理データ</li>
                 </ul>
 
-                <h3>自動的に収集される情報</h3>
+                <h3>自動収集情報</h3>
                 <ul>
-                    <li>端末情報（OS、モデル名、アプリバージョン等）</li>
-                    <li>利用状況（アクセスログ、エラーログ、機能の利用頻度等）</li>
+                    <li>端末情報（OS、モデル名、アプリバージョン）</li>
+                    <li>利用統計（アクセスログ、エラー情報、利用頻度）</li>
                     <li>IPアドレス、アクセス日時</li>
                 </ul>
             </section>
@@ -292,11 +261,11 @@
                     <h2>情報の利用目的</h2>
                 </div>
                 <ul>
-                    <li>本アプリの基幹機能（メモ作成・管理・通知等）の提供</li>
-                    <li>ユーザー体験のカスタマイズおよび利便性の向上</li>
-                    <li>新機能の開発、不具合修正、統計データの分析</li>
-                    <li>広告の配信およびその効果測定</li>
-                    <li>お問い合わせへの対応</li>
+                    <li>本アプリの基幹機能（メモ管理・通知等）の提供</li>
+                    <li>ユーザー体験の向上および機能のパーソナライズ</li>
+                    <li>アプリの不具合修正および機能改善の分析</li>
+                    <li>広告配信および効果測定</li>
+                    <li>ユーザーサポート対応</li>
                 </ul>
             </section>
 
@@ -305,17 +274,17 @@
                     <span class="section-num">03</span>
                     <h2>第三者への提供</h2>
                 </div>
-                <p>本アプリは、継続的な運営のため、以下のサービスを利用しています。</p>
+                <p>本アプリは運営継続のため、以下のサービスを利用しています。</p>
 
                 <h3>Google AdMob</h3>
                 <ul>
                     <li>目的：広告配信および効果測定</li>
-                    <li>提供情報：端末識別子（IDFA等）、IPアドレス、利用ログ</li>
                     <li>詳細：<a href="https://policies.google.com/privacy" class="external-link" target="_blank">Google プライバシーポリシー</a></li>
                 </ul>
-                <p style="font-size: 0.85rem; margin-top: 15px; background: var(--bg-soft); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent-gold);">
-                    ※AppleのATT（App Tracking Transparency）ガイドラインに基づき、ユーザーの許諾を得た範囲内で広告識別子を利用する場合があります。許可いただけない場合でも、個人を特定しない形での広告（非パーソナライズ広告）が表示されます。
-                </p>
+                <div class="info-box">
+                    <strong>【ATT（App Tracking Transparency）について】</strong><br>
+                    Appleのガイドラインに基づき、許諾を得た範囲で広告識別子を利用します。許可いただけない場合でも、個人を特定しない「非パーソナライズ広告」が表示されます。
+                </div>
             </section>
 
             <section>
@@ -324,42 +293,34 @@
                     <h2>情報の保存と管理</h2>
                 </div>
                 <ul>
-                    <li>ユーザーが入力した推しのデータは、原則として<strong>ユーザーの端末内にのみ保存</strong>されます。</li>
-                    <li>本アプリはアカウント登録機能を持たないため、サーバー上で個人情報を保持することはありません。</li>
-                    <li>アプリを削除すると、端末内のデータも全て削除されます。</li>
+                    <li>入力データは<strong>ユーザーの端末内にのみ保存</strong>されます。</li>
+                    <li>アカウント機能がないため、弊社サーバーで個人を特定することはありません。</li>
+                    <li>アプリを削除すると、すべてのデータは端末から消去されます。</li>
                 </ul>
             </section>
 
             <section>
                 <div class="section-header">
                     <span class="section-num">05</span>
-                    <h2>セキュリティ</h2>
+                    <h2>お問い合わせ</h2>
                 </div>
-                <p>本アプリは、不正アクセスや情報の漏洩を防止するため、OSの提供する安全なデータ保存領域を使用し、外部通信にはHTTPSによる暗号化を用いるなど、適切な安全対策を講じています。</p>
+                <p>本ポリシーに関するご質問は、以下のフォームよりお願いいたします。</p>
+                <div style="text-align: center;">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" class="btn-contact">お問い合わせフォーム</a>
+                </div>
             </section>
 
             <section>
                 <div class="section-header">
                     <span class="section-num">06</span>
-                    <h2>お問い合わせ</h2>
-                </div>
-                <p>本ポリシーに関するお問い合わせは、以下のフォームよりお願いいたします。</p>
-                <div style="text-align: center;">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" class="btn-contact">お問い合わせフォームへ</a>
-                </div>
-            </section>
-
-            <section>
-                <div class="section-header">
-                    <span class="section-num">07</span>
                     <h2>適用法令・変更</h2>
                 </div>
-                <p>本ポリシーは日本法を準拠法とします。法令の改正やサービス内容の変更に伴い、本ポリシーを予告なく改定することがあります。</p>
+                <p>本ポリシーは日本法を準拠法とし、必要に応じて予告なく改定することがあります。</p>
             </section>
         </main>
 
         <footer>
-            <p class="copyright">&copy; 2026 Satoshi Ohara. All rights reserved.</p>
+            <p>&copy; 2026 Satoshi Ohara. All rights reserved.</p>
         </footer>
     </div>
 </body>
