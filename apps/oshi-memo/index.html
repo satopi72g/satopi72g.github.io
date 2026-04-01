@@ -1,1 +1,308 @@
-sample
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推しメモ — Oshi Memo | あなたの推し活を、もっと輝かせる</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-navy: #1e293b;
+            --accent-gold: #b59410;
+            --gold-light: #f1e7b0;
+            --bg-white: #ffffff;
+            --bg-soft: #f8fafc;
+            --text-main: #334155;
+            --text-sub: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background-color: var(--primary-navy);
+            background-image: radial-gradient(circle at 20% 30%, rgba(181, 148, 16, 0.1) 0%, transparent 50%);
+            color: #ffffff;
+            padding: 100px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-gold);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .app-tagline {
+            color: var(--gold-light);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin-bottom: 20px;
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+        }
+
+        /* App Store Button (CSSのみでデザイン) */
+        .store-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #000;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .store-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .store-btn i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .store-btn .btn-text {
+            text-align: left;
+        }
+
+        .store-btn .small {
+            font-size: 0.7rem;
+            display: block;
+        }
+
+        .store-btn .big {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* --- Features Section --- */
+        .section-title {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary-navy);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent-gold);
+        }
+
+        .features {
+            max-width: 1000px;
+            margin: 0 auto 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-soft);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 25px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            color: var(--primary-navy);
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* --- App Concept Area --- */
+        .concept-dark {
+            background-color: var(--primary-navy);
+            color: #fff;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .concept-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .concept-container h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .concept-container p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* --- Links Section --- */
+        .links-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: var(--bg-soft);
+        }
+
+        .sub-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .sub-links a {
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .sub-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            background: var(--bg-white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero { padding: 60px 20px; }
+            .feature-card { padding: 30px 20px; }
+            .sub-links { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="app-tagline">Emotional Memo App for Fans</span>
+            <h1>推しメモ</h1>
+            <p>
+                あなたの「好き」という感情を、美しく記録する。<br>
+                推しの誕生日、記念日、忘れられない活動の記録を、<br>
+                あなただけの特別な空間にまとめましょう。
+            </p>
+            <a href="#" class="store-btn">
+                <i class="fa-brands fa-apple"></i>
+                <div class="btn-text">
+                    <span class="small">Download on the</span>
+                    <span class="big">App Store</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <section class="section-title">
+        <h2>Features</h2>
+    </section>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
+            <h3>推し専用プロフ管理</h3>
+            <p>推しの名前、誕生日、特別な記念日を詳細に登録。大切な日を忘れることはありません。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-pen-fancy"></i></div>
+            <h3>活動メモ＆リンク</h3>
+            <p>SNSの投稿リンクやイベントの感想、その瞬間の感情をテキストとして鮮明に残せます。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3>完全プライベート</h3>
+            <p>データは端末内のみに保存。あなたの大切な想いが外部に漏れることはありません。</p>
+        </div>
+    </div>
+
+    <section class="concept-dark">
+        <div class="concept-container">
+            <h2>Design & Philosophy</h2>
+            <p>
+                「推しメモ」は、情報の整理だけを目的としたツールではありません。<br>
+                アプリを開くたびに推しへの愛情が再確認できるような、<br>
+                上品で、それでいて心が弾むデザインを目指しました。<br>
+                複雑な設定は一切不要。思い立った瞬間に、あなたの「推し活」をアップデートできます。
+            </p>
+        </div>
+    </section>
+
+    <section class="links-section">
+        <div class="sub-links">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeToTYuvA3ik0m-2a_wbeeyEM6d6KWkqj4OWqOi2llCcOurvA/viewform?usp=dialog" target="_blank"><i class="fa-solid fa-envelope"></i> Support / Contact</a>
+            <a href="../privacy/oshim-privacypolicy.html"><i class="fa-solid fa-lock"></i> Privacy Policy</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Satoshi Ohara. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
