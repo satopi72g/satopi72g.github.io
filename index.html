@@ -933,6 +933,154 @@
       .update-item { grid-template-columns: 1fr; gap: 0.35rem; }
       .dev-info-grid { grid-template-columns: 1fr 1fr; }
     }
+
+
+    /* ══════════════════════════════════════════
+       推しメモ カード専用スタイル
+    ══════════════════════════════════════════ */
+
+    /* カード全体 — 紫×ピンクの深みある背景 */
+    .app-card.oshi {
+      box-shadow: 0 8px 48px rgba(124,58,237,0.22);
+    }
+    .app-card.oshi:hover {
+      box-shadow: 0 20px 72px rgba(192,38,211,0.32);
+    }
+
+    /* 背景グラデーション（写真の代わり） */
+    .oshi-card-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 100% at 75% 50%, #2d0845 0%, #0d001a 60%),
+        linear-gradient(135deg, #1a0030 0%, #0d001a 100%);
+      transition: transform 0.8s ease;
+    }
+    .app-card.oshi:hover .oshi-card-bg { transform: scale(1.03); }
+
+    /* 星屑パーティクル */
+    .oshi-stars {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .oshi-stars::before,
+    .oshi-stars::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px),
+        radial-gradient(circle, rgba(216,180,255,0.35) 1px, transparent 1px);
+      background-size: 80px 80px, 130px 130px;
+      background-position: 0 0, 40px 40px;
+    }
+
+    /* オーバーレイ — oshi は左→右（テキスト左） */
+    .app-card.oshi .app-card-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(10,0,22,0.88) 0%,
+        rgba(10,0,22,0.72) 40%,
+        rgba(10,0,22,0.15) 70%,
+        rgba(10,0,22,0.04) 100%
+      );
+    }
+
+    /* eyebrow — グラデーションテキスト */
+    .app-eyebrow.oshi-eyebrow {
+      background: linear-gradient(90deg, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .app-eyebrow.oshi-eyebrow::before {
+      background: linear-gradient(90deg, #c084fc, #f472b6);
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
+      background-clip: unset;
+    }
+
+    /* "New!" バッジ */
+    .oshi-new-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(90deg, #7c3aed, #db2777);
+      padding: 0.22rem 0.8rem;
+      border-radius: 100px;
+      margin-bottom: 0.8rem;
+    }
+
+    /* アプリ名 — グラデーション */
+    .app-name.oshi-name {
+      background: linear-gradient(90deg, #e2c9ff 0%, #fca5c5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* サブ名 */
+    .app-name-sub.oshi-name-sub {
+      color: rgba(216,180,255,0.55);
+    }
+
+    /* 説明文 */
+    .app-desc.oshi-desc {
+      color: rgba(240,220,255,0.7);
+    }
+
+    /* フィーチャーリスト — チェック丸を紫×ピンクに */
+    .feature-list.oshi-features li::before {
+      background: rgba(192,84,219,0.2);
+      border-color: #c054db;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,5 4,7 8,3' stroke='%23c084fc' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: 8px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .feature-list.oshi-features li {
+      color: rgba(240,220,255,0.62);
+    }
+
+    /* 詳しく見るボタン */
+    .btn-detail.oshi-btn {
+      border-color: rgba(192,132,252,0.35);
+      color: rgba(216,180,255,0.85);
+    }
+    .btn-detail.oshi-btn:hover {
+      background: rgba(124,58,237,0.22);
+      border-color: rgba(192,132,252,0.55);
+    }
+
+    /* スクショパネル — 紫系背景 */
+    .app-phones-panel.oshi-phones {
+      background: radial-gradient(ellipse at center, rgba(109,40,217,0.18) 0%, transparent 70%);
+    }
+
+    /* ハート形のデコライン */
+    .oshi-deco {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.45rem;
+      opacity: 0.28;
+      pointer-events: none;
+    }
+    .oshi-deco span {
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c084fc, #f472b6);
+    }
   </style>
 </head>
 <body>
@@ -1077,6 +1225,64 @@
   </article>
 
   <!-- ★★★ 新しいアプリはここに追加 ★★★ -->
+
+  <!-- ── 推しメモ ── -->
+  <article class="app-card oshi reveal delay-2"
+    itemscope itemtype="https://schema.org/MobileApplication">
+    <meta itemprop="operatingSystem" content="iOS" />
+    <meta itemprop="applicationCategory" content="Entertainment" />
+
+    <!-- 背景（写真なし → グラデーション＋星屑） -->
+    <div class="oshi-card-bg"></div>
+    <div class="oshi-stars"></div>
+    <div class="app-card-overlay"></div>
+
+    <div class="app-card-inner">
+      <!-- テキスト（左） -->
+      <div class="app-text-panel">
+        <span class="app-eyebrow oshi-eyebrow">iOS App · Free</span>
+        <div class="oshi-new-badge">✦ New Release</div>
+        <h3 class="app-name oshi-name" itemprop="name">推しメモ</h3>
+        <p class="app-name-sub oshi-name-sub">あなたの推し活を、もれなく刻む。</p>
+        <p class="app-desc oshi-desc" itemprop="description">
+          スクショを貼るだけでイベント情報を自動認識。推しごとの予定・記念日・参戦ログを、あなただけの専用スペースにまとめて保存。VTuber・アニメ・アイドル・声優など、ジャンルをまたいで推し活を管理できます。
+        </p>
+        <ul class="feature-list oshi-features">
+          <li>スクショOCRでイベント情報を自動登録</li>
+          <li>推し別カラー管理でスケジュールをひと目で把握</li>
+          <li>ライブ・配信のカウントダウン機能</li>
+          <li>画像付き参戦ログ・タグ整理に対応</li>
+          <li>端末内完結・ログイン不要・完全プライベート</li>
+        </ul>
+        <div class="app-ctas">
+          <a href="https://apps.apple.com/jp/app/%E6%8E%A8%E3%81%97%E3%83%A1%E3%83%A2/id6761374229"
+             class="badge-appstore" target="_blank" rel="noopener" itemprop="downloadUrl">
+            <img src="assets/images/icons/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg"
+                 alt="Download on the App Store" />
+          </a>
+          <a href="apps/oshi-memo/index.html" class="btn-detail oshi-btn">
+            詳しく見る
+            <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- スクショ（右） -->
+      <div class="app-phones-panel oshi-phones">
+        <div class="app-phone app-phone-sub">
+          <img src="assets/images/screenshots/oshi-memo/20_calendar001.png"
+               alt="推しメモ カレンダー" loading="lazy" />
+        </div>
+        <div class="app-phone app-phone-main">
+          <img src="assets/images/screenshots/oshi-memo/10_home001.png"
+               alt="推しメモ ホーム" loading="lazy" />
+        </div>
+        <div class="oshi-deco">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </article>
 
 </section>
 
@@ -1310,6 +1516,14 @@
           </span>
           <span class="footer-app-link-arrow">›</span>
         </a>
+        <a href="apps/oshi-memo/index.html" class="footer-app-link" style="border-color:rgba(192,132,252,0.18);">
+          <span class="footer-app-link-icon" style="background:rgba(124,58,237,0.18);">💜</span>
+          <span>
+            <span class="footer-app-link-name">推しメモ</span>
+            <span class="footer-app-link-sub">あなたの推し活を、もれなく刻む。</span>
+          </span>
+          <span class="footer-app-link-arrow" style="color:rgba(192,132,252,0.5);">›</span>
+        </a>
       </div>
     </div>
     <div class="footer-nav-col">
@@ -1317,6 +1531,7 @@
       <ul class="footer-nav-list">
         <li><a href="https://apps.apple.com/jp/app/weather-golf-%E3%82%B4%E3%83%AB%E3%83%95%E5%A0%B4%E5%A4%A9%E6%B0%97-%E3%82%B9%E3%82%B3%E3%82%A2%E5%BD%B1%E9%9F%BF%E5%88%86%E6%9E%90/id6759699964" target="_blank" rel="noopener">Weather Golf</a></li>
         <li><a href="https://apps.apple.com/jp/app/%E3%82%B4%E3%83%AB%E3%83%95%E8%AA%B2%E9%A1%8C%E3%83%A1%E3%83%A2-golf-issue-memo/id6760370356" target="_blank" rel="noopener">ゴルフ課題メモ</a></li>
+        <li><a href="https://apps.apple.com/jp/app/%E6%8E%A8%E3%81%97%E3%83%A1%E3%83%A2/id6761374229" target="_blank" rel="noopener">推しメモ</a></li>
       </ul>
     </div>
     <div class="footer-nav-col">
