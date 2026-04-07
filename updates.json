@@ -1,12 +1,17 @@
 [
   {
-    "date": "2026.03.16",
+    "date": "2026.04.07",
     "tag": "new",
+    "text": "推しメモ — App Store リリース"
+  }
+  {
+    "date": "2026.03.16",
+    "tag": "release",
     "text": "ゴルフ課題メモ — App Store リリース"
   },
   {
     "date": "2026.03.12",
-    "tag": "new",
+    "tag": "release",
     "text": "Weather Golf — App Store リリース"
   }
 ]
